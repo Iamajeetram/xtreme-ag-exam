@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign In | Xtreme Exam</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#0b0b0d;color:#fff;font-family:Arial,sans-serif;display:grid;place-items:center;padding:20px}
+.card{width:min(440px,100%);background:#151519;border:1px solid #292930;border-radius:24px;padding:34px 24px;text-align:center;box-shadow:0 20px 70px #0008}
+.mark{width:48px;height:48px;border:2px solid #d4af37;border-radius:14px;display:grid;place-items:center;margin:0 auto 12px;color:#f5d76e;font-weight:900;font-size:22px}
+.logo{font-weight:800;font-size:20px;margin-bottom:34px}.logo span{color:#d4af37}h1{font-size:30px;margin:0 0 10px}.sub{color:#aaa;line-height:1.6;margin:0 auto 28px}
+.google{width:100%;min-height:52px;border:1px solid #ddd;border-radius:12px;background:#fff;color:#222;font-size:16px;font-weight:700;cursor:pointer}.google:disabled{opacity:.65}
+.msg{display:none;margin-top:18px;padding:13px;border-radius:10px;background:#3a1717;border:1px solid #8d3838;color:#ffb7b7;text-align:left;font-size:14px;word-break:break-word}
+</style></head>
+<body><main class="card">
+<div class="mark">X</div><div class="logo">Xtreme <span>AG Apps</span></div>
+<h1>Welcome back</h1><p class="sub">Sign in with your Google account to access Xtreme Exam.</p>
+<button id="google" class="google">Continue with Google</button>
+<div id="msg" class="msg"></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase=window.supabase.createClient('https://vbfjafblxnrfminbdlbb.supabase.co','sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9',{
+auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+});
+const REDIRECT='https://exam.xtremeagapps.in/auth.html';
+function error(m){const x=document.getElementById('msg');x.textContent=m;x.style.display='block';document.getElementById('google').disabled=false;document.getElementById('google').textContent='Continue with Google';}
+async function route(s){
+ if(!s?.user)return;
+ const email=(s.user.email||'').toLowerCase().trim();
+ const {data:p,error:e}=await supabase.from('profiles').select('display_name,mobile,is_admin').eq('id',s.user.id).maybeSingle();
+ if(e){error('Profile check failed: '+e.message);return;}
+ if(email==='ajeetram3@gmail.com' && p?.is_admin===true){location.replace('./admin.html');return;}
+ if(p?.display_name && p?.mobile){location.replace('./test-portal.html');return;}
+ location.replace('./complete-profile.html');
+}
+supabase.auth.getSession().then(r=>{if(r.data.session) route(r.data.session);});
+supabase.auth.onAuthStateChange((event,s)=>{if(event==='SIGNED_IN'&&s)route(s);});
+document.getElementById('google').addEventListener('click',async()=>{
+ const b=document.getElementById('google');b.disabled=true;b.textContent='Opening Google...';
+ try{
+  const {data,error:e}=await supabase.auth.signInWithOAuth({
+   provider:'google',options:{redirectTo:REDIRECT,queryParams:{prompt:'select_account'}}
+  });
+  if(e)throw e;
+  if(data?.url)location.assign(data.url);
+ }catch(e){error(e.message||'Google sign-in failed.');}
+});
+</script></body></html>
