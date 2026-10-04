@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign In | Xtreme Exam</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#0b0b0d;color:#fff;font-family:Arial,Helvetica,sans-serif;display:grid;place-items:center;padding:20px}
+.card{width:min(440px,100%);background:#151519;border:1px solid #292930;border-radius:24px;padding:34px 24px;box-shadow:0 20px 70px rgba(0,0,0,.45);text-align:center}
+.logo{font-weight:800;font-size:20px;margin-bottom:34px}.logo span{color:#d4af37}
+.mark{width:48px;height:48px;border:2px solid #d4af37;border-radius:14px;display:grid;place-items:center;margin:0 auto 12px;color:#f5d76e;font-weight:900;font-size:22px}
+h1{font-size:30px;margin:0 0 10px}.sub{color:#aaa;line-height:1.6;margin:0 auto 28px;max-width:340px}
+.google{width:100%;min-height:52px;border:1px solid #d7d7d7;border-radius:12px;background:#fff;color:#222;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px}
+.google:disabled{opacity:.65;cursor:wait}.g{font-size:22px;font-weight:900;color:#4285f4}
+.msg{display:none;margin-top:18px;padding:13px 14px;border-radius:10px;background:#3a1717;border:1px solid #8d3838;color:#ffb7b7;text-align:left;line-height:1.45;font-size:14px;word-break:break-word}
+.small{margin-top:22px;color:#777;font-size:12px}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="mark">X</div>
+  <div class="logo">Xtreme <span>AG Apps</span></div>
+  <h1>Welcome back</h1>
+  <p class="sub">Sign in with your Google account. New users will complete their profile after sign-in.</p>
+  <button id="googleBtn" class="google" type="button">
+    <span class="g">G</span><span id="btnText">Continue with Google</span>
+  </button>
+  <div id="msg" class="msg"></div>
+  <div class="small">One account for Xtreme AG Apps services.</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://vbfjafblxnrfminbdlbb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9';
+const ADMIN_EMAIL = 'ajeetram3@gmail.com';
+const REDIRECT_URL = 'https://exam.xtremeagapps.in/auth.html';
+
+let supabaseClient;
+
+function showError(message) {
+  const box = document.getElementById('msg');
+  box.textContent = message;
+  box.style.display = 'block';
+  const btn = document.getElementById('googleBtn');
+  btn.disabled = false;
+  document.getElementById('btnText').textContent = 'Continue with Google';
+}
+
+async function routeUser(session) {
+  if (!session || !session.user) {
+    window.location.replace(REDIRECT_URL);
+    return;
+  }
+
+  const email = (session.user.email || '').toLowerCase().trim();
+
+  const { data: profile, error } = await supabaseClient
+    .from('profiles')
+    .select('display_name,mobile,is_admin')
+    .eq('id', session.user.id)
+    .maybeSingle();
+
+  if (error) {
+    showError('Account signed in, but profile check failed: ' + error.message);
+    return;
+  }
+
+  // Admin is determined by the existing secure profile flag.
+  // The known administrator email is also required for the requested admin route.
+  if (email === ADMIN_EMAIL && profile && profile.is_admin === true) {
+    window.location.replace('./admin.html');
+    return;
+  }
+
+  if (profile && profile.display_name && profile.mobile) {
+    window.location.replace('./test-portal.html');
+    return;
+  }
+
+  window.location.replace('./complete-profile.html');
+}
+
+async function init() {
+  try {
+    if (!window.supabase) {
+      showError('Supabase library could not load. Check internet connection and refresh.');
+      return;
+    }
+
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
+    if (error) {
+      showError(error.message);
+      return;
+    }
+
+    if (session) {
+      await routeUser(session);
+    }
+
+    supabaseClient.auth.onAuthStateChange(async (event, newSession) => {
+      if (event === 'SIGNED_IN' && newSession) {
+        await routeUser(newSession);
+      }
+    });
+  } catch (e) {
+    showError(e && e.message ? e.message : 'Unable to initialize sign-in.');
+  }
+}
+
+document.getElementById('googleBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('googleBtn');
+  const text = document.getElementById('btnText');
+  btn.disabled = true;
+  text.textContent = 'Opening Google...';
+  document.getElementById('msg').style.display = 'none';
+
+  try {
+    if (!supabaseClient) throw new Error('Authentication is still loading. Please try again.');
+
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: REDIRECT_URL,
+        queryParams: { prompt: 'select_account' }
+      }
+    });
+
+    if (error) throw error;
+
+    // Explicit navigation makes the browser redirect unambiguous.
+    if (data && data.url) window.location.assign(data.url);
+  } catch (e) {
+    showError(e && e.message ? e.message : 'Google sign-in failed.');
+  }
+});
+
+init();
+</script>
+</body>
+</html>
