@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xtreme Exam | Sign In</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#fffaf0;color:#38251b;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:min(430px,100%);background:#fffdf8;border:1px solid #d9b77a;border-radius:22px;padding:30px 24px;box-shadow:0 14px 45px rgba(92,55,20,.12);position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0 0 auto;height:7px;background:#a85d24}
+.motif{font-size:28px;text-align:center;color:#a85d24;margin:5px 0 10px}
+h1{text-align:center;margin:0;font-family:Georgia,serif;color:#7d3f1d;font-size:30px}
+.sub{text-align:center;color:#795f4d;margin:8px 0 25px}
+button{width:100%;border:1px solid #c89b58;background:#fff;color:#38251b;border-radius:13px;padding:14px 16px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(92,55,20,.08)}
+button:hover{background:#fff7e7}
+.status{text-align:center;min-height:22px;margin-top:14px;font-size:14px;color:#7d3f1d}
+.small{text-align:center;margin-top:20px;font-size:12px;color:#907967}
+</style>
+</head>
+<body>
+<main class="card">
+<div class="motif">✦  ॐ  ✦</div>
+<h1>Xtreme Exam</h1>
+<div class="sub">Rajasthan Traditional • Modern Preparation</div>
+<button id="googleBtn" type="button">Continue with Google</button>
+<div id="status" class="status"></div>
+<div class="small">Secure Google Sign-In</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://vbfjafblxnrfminbdlbb.supabase.co";
+const SUPABASE_KEY="sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const statusEl=document.getElementById("status");
+const btn=document.getElementById("googleBtn");
+
+async function startGoogle(){
+  btn.disabled=true;
+  statusEl.textContent="Opening Google...";
+  const r=await supabase.auth.signInWithOAuth({
+    provider:"google",
+    options:{
+      redirectTo:"https://exam.xtremeagapps.in/auth.html"
+    }
+  });
+  if(r.error){
+    btn.disabled=false;
+    statusEl.textContent=r.error.message;
+  }
+}
+btn.addEventListener("click",startGoogle);
+
+async function route(){
+  const {data:{session}}=await supabase.auth.getSession();
+  if(!session)return;
+  const email=(session.user.email||"").toLowerCase().trim();
+  const {data:p}=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",session.user.id).maybeSingle();
+  if(email==="ajeetram3@gmail.com" && p?.is_admin===true) location.href="./admin.html";
+  else if(p?.display_name && p?.mobile) location.href="./test-portal.html";
+  else location.href="./complete-profile.html";
+}
+route();
+</script>
+</body>
+</html>

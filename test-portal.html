@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xtreme Exam | Test Series</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#fffaf0;color:#38251b}.top{padding:24px 20px;background:#fffdf8;border-bottom:1px solid #dec28d}.wrap{max-width:1000px;margin:auto}.brand{font:700 30px Georgia,serif;color:#7d3f1d}.sub{color:#795f4d;margin-top:4px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:28px}.tile{background:#fffdf8;border:1px solid #d9b77a;border-radius:18px;padding:24px;box-shadow:0 8px 25px rgba(92,55,20,.08)}.tile h2{font:700 23px Georgia,serif;color:#7d3f1d;margin:0 0 9px}.tile p{color:#795f4d}.tile button{padding:11px 16px;border-radius:10px;border:1px solid #a85d24;background:#fff;color:#7d3f1d;font-weight:700}.motif{color:#a85d24;font-size:20px}
+</style></head><body><header class="top"><div class="wrap"><div class="motif">✦  ॐ  ✦</div><div class="brand">Xtreme Exam</div><div class="sub">Test Series Portal</div></div></header><main class="wrap"><section class="grid">
+<article class="tile"><h2>Raj GK</h2><p>Rajasthan General Knowledge</p><button>Open</button></article>
+<article class="tile"><h2>RAS Prelims</h2><p>RPSC RAS Preliminary Test Series</p><button>Open</button></article>
+<article class="tile"><h2>RPSC 2nd Grade</h2><p>2nd Grade competitive preparation</p><button>Open</button></article>
+</section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const s=window.supabase.createClient("https://vbfjafblxnrfminbdlbb.supabase.co","sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9");
+(async()=>{const {data:{session}}=await s.auth.getSession();if(!session){location.href="./auth.html";return}
+const {data:p}=await s.from("profiles").select("display_name,mobile,is_admin").eq("id",session.user.id).maybeSingle();
+if(!p?.display_name||!p?.mobile){location.href="./complete-profile.html";return}
+if((session.user.email||"").toLowerCase()==="ajeetram3@gmail.com"&&p.is_admin===true){location.href="./admin.html";}
+})();</script></body></html>
