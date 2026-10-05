@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Xtreme Exam - Sign In</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>body{font-family:Arial;background:#080808;color:#fff;display:grid;place-items:center;min-height:100vh}.card{width:min(92%,420px);padding:32px;border:1px solid #333;border-radius:20px;background:#111;text-align:center}button{width:100%;padding:14px;border:0;border-radius:10px;font-weight:700;cursor:pointer}#status{margin-top:16px;color:#aaa}</style></head>
+<body><div class="card"><h1>Xtreme Exam</h1><p>Sign in with Google</p><button id="googleBtn">Continue with Google</button><div id="status"></div></div>
+<script>
+const SUPABASE_URL="https://vbfjafblxnrfminbdlbb.supabase.co", SUPABASE_KEY="sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9", ADMIN_EMAIL="ajeetram3@gmail.com";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const statusEl=document.getElementById("status");
+const go=p=>window.location.replace(p);
+async function route(){
+ const r=await supabase.auth.getSession(); if(r.error){statusEl.textContent=r.error.message;return}
+ const s=r.data.session; if(!s?.user)return;
+ const q=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",s.user.id).maybeSingle();
+ if(q.error){statusEl.textContent="Profile check failed: "+q.error.message;return}
+ const email=(s.user.email||"").trim().toLowerCase(), p=q.data;
+ if(email===ADMIN_EMAIL && p?.is_admin===true)return go("./admin.html");
+ if(p?.display_name?.trim() && /^[0-9]{10}$/.test(p.mobile||""))return go("./test-portal.html");
+ go("./complete-profile.html");
+}
+document.getElementById("googleBtn").onclick=async()=>{
+ statusEl.textContent="Opening Google...";
+ const r=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/auth.html"}});
+ if(r.error)statusEl.textContent=r.error.message;
+};
+route();
+</script></body></html>

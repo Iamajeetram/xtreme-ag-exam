@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Complete Profile</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>body{font-family:Arial;background:#080808;color:#fff;display:grid;place-items:center;min-height:100vh}.card{width:min(92%,460px);padding:28px;border:1px solid #333;border-radius:20px;background:#111}input{box-sizing:border-box;width:100%;padding:13px;margin:8px 0 14px;border:1px solid #444;border-radius:9px;background:#181818;color:#fff}button{width:100%;padding:14px;border:0;border-radius:10px;font-weight:700;cursor:pointer}#status{margin-top:14px;color:#aaa}</style></head>
+<body><div class="card"><h1>Complete Profile</h1><p>Enter your details once.</p><label>Full Name</label><input id="name"><label>Mobile Number</label><input id="mobile" inputmode="numeric" maxlength="10"><button id="save">Continue to Test Portal</button><div id="status"></div></div>
+<script>
+const SUPABASE_URL="https://vbfjafblxnrfminbdlbb.supabase.co", SUPABASE_KEY="sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9", ADMIN_EMAIL="ajeetram3@gmail.com";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const statusEl=document.getElementById("status"); let session=null;
+async function init(){
+ const r=await supabase.auth.getSession(); if(r.error||!r.data.session){location.replace("./auth.html");return}
+ session=r.data.session; document.getElementById("name").value=(session.user.user_metadata?.full_name||session.user.user_metadata?.name||"").trim();
+}
+document.getElementById("save").onclick=async()=>{
+ const name=document.getElementById("name").value.trim(), mobile=document.getElementById("mobile").value.trim();
+ if(name.length<2)return statusEl.textContent="Enter a valid full name.";
+ if(!/^[0-9]{10}$/.test(mobile))return statusEl.textContent="Enter a valid 10-digit mobile number.";
+ statusEl.textContent="Saving...";
+ const r=await supabase.rpc("complete_exam_profile",{_display_name:name,_mobile:mobile});
+ if(r.error)return statusEl.textContent="Profile save failed: "+r.error.message;
+ const v=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",session.user.id).maybeSingle();
+ if(v.error)return statusEl.textContent="Profile verification failed: "+v.error.message;
+ const p=v.data, email=(session.user.email||"").toLowerCase().trim();
+ if(!p?.display_name?.trim()||!/^[0-9]{10}$/.test(p.mobile||""))return statusEl.textContent="Profile was not saved correctly.";
+ if(email===ADMIN_EMAIL&&p.is_admin===true)location.replace("./admin.html");else location.replace("./test-portal.html");
+};
+init();
+</script></body></html>

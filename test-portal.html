@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Xtreme Exam - Test Series</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#080808;color:#fff}header{padding:18px 5%;border-bottom:1px solid #222;display:flex;justify-content:space-between}main{max-width:1050px;margin:auto;padding:45px 5%}.muted{color:#999}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}.card{padding:24px;border:1px solid #333;border-radius:18px;background:#111;min-height:170px}.btn,button{padding:11px 14px;border-radius:9px;border:1px solid #444;background:#fff;color:#111;font-weight:700;cursor:pointer}@media(max-width:750px){.grid{grid-template-columns:1fr}}</style></head>
+<body><header><strong>Xtreme Exam</strong><button id="signout">Sign Out</button></header><main><div id="loading">Checking account...</div><section id="content" hidden><h1>Test Series Portal</h1><p class="muted">Choose your test series.</p><div class="grid">
+<div class="card"><h2>Raj GK</h2><p class="muted">Rajasthan General Knowledge</p><a class="btn" href="#">Open</a></div>
+<div class="card"><h2>RAS Prelims</h2><p class="muted">Rajasthan Administrative Service</p><a class="btn" href="#">Open</a></div>
+<div class="card"><h2>RPSC 2nd Grade</h2><p class="muted">RPSC Senior Teacher</p><a class="btn" href="#">Open</a></div>
+</div></section></main>
+<script>
+const SUPABASE_URL="https://vbfjafblxnrfminbdlbb.supabase.co", SUPABASE_KEY="sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9", ADMIN_EMAIL="ajeetram3@gmail.com";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+async function guard(){
+ const r=await supabase.auth.getSession(); if(r.error||!r.data.session){location.replace("./auth.html");return}
+ const s=r.data.session, q=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",s.user.id).maybeSingle();
+ if(q.error){document.getElementById("loading").textContent="Profile check failed: "+q.error.message;return}
+ const email=(s.user.email||"").toLowerCase().trim(), p=q.data;
+ if(email===ADMIN_EMAIL&&p?.is_admin===true){location.replace("./admin.html");return}
+ if(!p?.display_name?.trim()||!/^[0-9]{10}$/.test(p.mobile||"")){location.replace("./complete-profile.html");return}
+ document.getElementById("loading").hidden=true;document.getElementById("content").hidden=false;
+}
+document.getElementById("signout").onclick=async()=>{await supabase.auth.signOut();location.replace("./auth.html")};
+guard();
+</script></body></html>
