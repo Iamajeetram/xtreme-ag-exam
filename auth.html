@@ -1,66 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Xtreme Exam | Sign In</title>
-<style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#fffaf0;color:#38251b;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{width:min(430px,100%);background:#fffdf8;border:1px solid #d9b77a;border-radius:22px;padding:30px 24px;box-shadow:0 14px 45px rgba(92,55,20,.12);position:relative;overflow:hidden}
-.card:before{content:"";position:absolute;inset:0 0 auto;height:7px;background:#a85d24}
-.motif{font-size:28px;text-align:center;color:#a85d24;margin:5px 0 10px}
-h1{text-align:center;margin:0;font-family:Georgia,serif;color:#7d3f1d;font-size:30px}
-.sub{text-align:center;color:#795f4d;margin:8px 0 25px}
-button{width:100%;border:1px solid #c89b58;background:#fff;color:#38251b;border-radius:13px;padding:14px 16px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(92,55,20,.08)}
-button:hover{background:#fff7e7}
-.status{text-align:center;min-height:22px;margin-top:14px;font-size:14px;color:#7d3f1d}
-.small{text-align:center;margin-top:20px;font-size:12px;color:#907967}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Sign In | Xtreme Exam Portal</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --indigo: #4f46e5;
+      --wa: #16a34a;
+      --shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.11), transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(79, 70, 229, 0.09), transparent 35%),
+        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* Top Minimal Bar */
+    header {
+      width: min(1140px, 92%);
+      margin: 0 auto;
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .brand b { color: var(--blue); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* Main Auth Container */
+    .auth-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: min(440px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 38px 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 6px;
+      background: linear-gradient(90deg, var(--blue), var(--indigo));
+    }
+
+    .motif-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin: 10px 0 26px;
+    }
+
+    /* Perks Box */
+    .perks {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+      text-align: left;
+      display: grid;
+      gap: 8px;
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .perk-item span {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    /* Google Sign-In Button */
+    .google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 16px;
+      padding: 15px 18px;
+      font-family: inherit;
+      font-size: 15.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .google-btn:hover:not(:disabled) {
+      border-color: var(--blue);
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.12);
+    }
+
+    .google-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .google-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .status.error {
+      color: #dc2626;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 22px 0 18px;
+    }
+
+    .help-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .wa-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--wa);
+      font-weight: 700;
+    }
+
+    .wa-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 30px 22px; }
+      .help-row { justify-content: center; }
+    }
+  </style>
 </head>
 <body>
-<main class="card">
-<div class="motif">✦  ॐ  ✦</div>
-<h1>Xtreme Exam</h1>
-<div class="sub">Rajasthan Traditional • Modern Preparation</div>
-<button id="googleBtn" type="button">Continue with Google</button>
-<div id="status" class="status"></div>
-<div class="small">Secure Google Sign-In</div>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL="https://vbfjafblxnrfminbdlbb.supabase.co";
-const SUPABASE_KEY="sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9";
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const statusEl=document.getElementById("status");
-const btn=document.getElementById("googleBtn");
+  <header>
+    <a class="brand" href="./">
+      <div class="brand-logo">X</div>
+      <div>XTREME <b>AG APPS</b></div>
+    </a>
+    <a class="back-btn" href="./">← Back to Home</a>
+  </header>
 
-async function startGoogle(){
-  btn.disabled=true;
-  statusEl.textContent="Opening Google...";
-  const r=await supabase.auth.signInWithOAuth({
-    provider:"google",
-    options:{
-      redirectTo:"https://exam.xtremeagapps.in/auth.html"
+  <div class="auth-wrap">
+    <main class="card">
+      <div class="motif-badge">✦ ॐ ✦ STUDENT PORTAL</div>
+      <h1>Welcome to Xtreme Exam</h1>
+      <div class="sub">
+        Sign in with your Google account to access Test Series, Attempt History & Study Material.
+      </div>
+
+      <div class="perks">
+        <div class="perk-item"><span>✓</span> Instant access to Raj GK, RAS & 2nd Grade Tests</div>
+        <div class="perk-item"><span>✓</span> Automatic score saving & rank analysis</div>
+        <div class="perk-item"><span>✓</span> One-click secure Google authentication</div>
+      </div>
+
+      <button id="googleBtn" class="google-btn" type="button">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+          <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+          <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+          <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.9 7.4 24 12 24z"/>
+        </svg>
+        <span id="btnText">Continue with Google</span>
+      </button>
+
+      <div id="status" class="status"></div>
+
+      <div class="divider"></div>
+
+      <div class="help-row">
+        <span>🔒 100% Secure Sign-In</span>
+        <a class="wa-link" href="https://wa.me/917878025556?text=Hello%20Sir%2C%20mujhe%20Xtreme%20Exam%20Portal%20login%20mein%20help%20chahiye." target="_blank" rel="noopener">
+          💬 Need Help? 7878025556
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://vbfjafblxnrfminbdlbb.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("googleBtn");
+    const btnText = document.getElementById("btnText");
+
+    async function startGoogle() {
+      btn.disabled = true;
+      btnText.textContent = "Connecting to Google...";
+      statusEl.className = "status";
+      statusEl.textContent = "Redirecting to secure Google Sign-In...";
+
+      const r = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: "https://exam.xtremeagapps.in/auth.html"
+        }
+      });
+
+      if (r.error) {
+        btn.disabled = false;
+        btnText.textContent = "Continue with Google";
+        statusEl.className = "status error";
+        statusEl.textContent = r.error.message;
+      }
     }
-  });
-  if(r.error){
-    btn.disabled=false;
-    statusEl.textContent=r.error.message;
-  }
-}
-btn.addEventListener("click",startGoogle);
 
-async function route(){
-  const {data:{session}}=await supabase.auth.getSession();
-  if(!session)return;
-  const email=(session.user.email||"").toLowerCase().trim();
-  const {data:p}=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",session.user.id).maybeSingle();
-  if(email==="ajeetram3@gmail.com" && p?.is_admin===true) location.href="./admin.html";
-  else if(p?.display_name && p?.mobile) location.href="./test-portal.html";
-  else location.href="./complete-profile.html";
-}
-route();
-</script>
+    btn.addEventListener("click", startGoogle);
+
+    async function route() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      statusEl.textContent = "Verifying your profile...";
+      btn.disabled = true;
+
+      const email = (session.user.email || "").toLowerCase().trim();
+      const { data: p } = await supabase
+        .from("profiles")
+        .select("display_name,mobile,is_admin")
+        .eq("id", session.user.id)
+        .maybeSingle();
+
+      if (email === "ajeetram3@gmail.com" && p?.is_admin === true) {
+        location.href = "./admin.html";
+      } else if (p?.display_name && p?.mobile) {
+        location.href = "./test-portal.html";
+      } else {
+        location.href = "./complete-profile.html";
+      }
+    }
+
+    route();
+  </script>
 </body>
 </html>
