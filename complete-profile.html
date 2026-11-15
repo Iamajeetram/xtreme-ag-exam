@@ -1,41 +1,386 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Complete Profile | Xtreme Exam</title>
-<style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui;background:#fffaf0;color:#38251b;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{width:min(470px,100%);background:#fffdf8;border:1px solid #d9b77a;border-radius:22px;padding:30px 24px;box-shadow:0 14px 45px rgba(92,55,20,.12)}.motif{text-align:center;color:#a85d24;font-size:25px}h1{font:700 28px Georgia,serif;text-align:center;color:#7d3f1d;margin:8px 0}.sub{text-align:center;color:#795f4d;margin-bottom:24px}
-label{display:block;font-weight:700;margin:15px 0 7px}input{width:100%;padding:13px;border:1px solid #cfae78;border-radius:11px;background:#fff;font-size:16px}button{width:100%;margin-top:22px;padding:14px;border:0;border-radius:12px;background:#a85d24;color:white;font-size:16px;font-weight:800}#msg{text-align:center;margin-top:13px;color:#7d3f1d;min-height:22px}
-</style></head><body><main class="card"><div class="motif">✦  ॐ  ✦</div><h1>Complete Your Profile</h1><div class="sub">बस दो जानकारी और आपका Xtreme Exam profile तैयार है</div>
-<label>Full Name</label><input id="name" autocomplete="name" placeholder="Enter your full name">
-<label>Mobile Number</label><input id="mobile" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number">
-<button id="save">Continue to Test Portal</button><div id="msg"></div></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabase=window.supabase.createClient("https://vbfjafblxnrfminbdlbb.supabase.co","sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9");
-const msg=document.getElementById("msg");
-async function init(){
- const {data:{session}}=await supabase.auth.getSession();
- if(!session){location.href="./auth.html";return}
- const {data:p}=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",session.user.id).maybeSingle();
- document.getElementById("name").value=p?.display_name||session.user.user_metadata?.full_name||session.user.user_metadata?.name||"";
- if(p?.display_name && p?.mobile) route(p,session);
-}
-function route(p,s){
- const email=(s.user.email||"").toLowerCase().trim();
- location.href=(email==="ajeetram3@gmail.com"&&p.is_admin===true)?"./admin.html":"./test-portal.html";
-}
-document.getElementById("save").onclick=async()=>{
- const name=document.getElementById("name").value.trim(), mobile=document.getElementById("mobile").value.trim();
- if(name.length<2){msg.textContent="Please enter your full name";return}
- if(!/^[0-9]{10}$/.test(mobile)){msg.textContent="Please enter a valid 10-digit mobile number";return}
- msg.textContent="Saving profile...";
- const {error}=await supabase.rpc("complete_exam_profile",{_display_name:name,_mobile:mobile});
- if(error){msg.textContent=error.message;return}
- const {data:p,error:e}=await supabase.from("profiles").select("display_name,mobile,is_admin").eq("id",(await supabase.auth.getUser()).data.user.id).maybeSingle();
- if(e||!p?.display_name||!p?.mobile){msg.textContent=e?.message||"Profile save could not be verified.";return}
- route(p,(await supabase.auth.getSession()).data.session);
-};
-init();
-</script></body></html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Complete Profile | Xtreme Exam Portal</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --indigo: #4f46e5;
+      --wa: #16a34a;
+      --shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.11), transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(79, 70, 229, 0.09), transparent 35%),
+        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      width: min(1140px, 92%);
+      margin: 0 auto;
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .brand b { color: var(--blue); }
+
+    .step-pill {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: min(470px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 38px 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 6px;
+      background: linear-gradient(90deg, var(--blue), var(--indigo));
+    }
+
+    .top-center {
+      text-align: center;
+    }
+
+    .motif {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 0 0 8px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14.5px;
+      margin-bottom: 26px;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .prefix {
+      position: absolute;
+      left: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      background: #f8fafc;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15.5px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input.with-prefix {
+      padding-left: 52px;
+    }
+
+    input:focus {
+      background: #fff;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 15px 18px;
+      border: 0;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      color: #fff;
+      font-family: inherit;
+      font-size: 15.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.34);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    #msg {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--blue);
+      min-height: 20px;
+    }
+
+    #msg.error {
+      color: #dc2626;
+    }
+
+    .help-footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .wa-support {
+      color: var(--wa);
+      font-weight: 700;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 30px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="brand" href="./">
+      <div class="brand-logo">X</div>
+      <div>XTREME <b>AG APPS</b></div>
+    </a>
+    <span class="step-pill">Final Step • Profile Setup</span>
+  </header>
+
+  <div class="wrap">
+    <main class="card">
+      <div class="top-center">
+        <div class="motif">✦ ॐ ✦ ALMOST READY</div>
+        <h1>Complete Your Profile</h1>
+        <div class="sub">बस दो जानकारी और आपका Xtreme Exam प्रोफाइल तैयार है</div>
+      </div>
+
+      <div class="field">
+        <label for="name">Student Full Name</label>
+        <input id="name" autocomplete="name" placeholder="Enter your full name">
+      </div>
+
+      <div class="field">
+        <label for="mobile">WhatsApp / Mobile Number</label>
+        <div class="input-wrap">
+          <span class="prefix">+91</span>
+          <input id="mobile" class="with-prefix" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number">
+        </div>
+      </div>
+
+      <button id="save" type="button">Save & Continue to Test Portal →</button>
+      <div id="msg"></div>
+
+      <div class="help-footer">
+        <span>🔒 Details kept private & secure</span>
+        <a class="wa-support" href="https://wa.me/917878025556?text=Hello%20Sir%2C%20mujhe%20Profile%20Setup%20mein%20help%20chahiye." target="_blank" rel="noopener">
+          💬 Help: 7878025556
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabase = window.supabase.createClient(
+      "https://vbfjafblxnrfminbdlbb.supabase.co",
+      "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9"
+    );
+    const msg = document.getElementById("msg");
+    const saveBtn = document.getElementById("save");
+
+    async function init() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        location.href = "./auth.html";
+        return;
+      }
+      const { data: p } = await supabase
+        .from("profiles")
+        .select("display_name,mobile,is_admin")
+        .eq("id", session.user.id)
+        .maybeSingle();
+
+      document.getElementById("name").value =
+        p?.display_name ||
+        session.user.user_metadata?.full_name ||
+        session.user.user_metadata?.name ||
+        "";
+
+      if (p?.display_name && p?.mobile) route(p, session);
+    }
+
+    function route(p, s) {
+      const email = (s.user.email || "").toLowerCase().trim();
+      location.href =
+        email === "ajeetram3@gmail.com" && p.is_admin === true
+          ? "./admin.html"
+          : "./test-portal.html";
+    }
+
+    saveBtn.onclick = async () => {
+      const name = document.getElementById("name").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+
+      msg.className = "";
+      if (name.length < 2) {
+        msg.className = "error";
+        msg.textContent = "Please enter your valid full name";
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        msg.className = "error";
+        msg.textContent = "Please enter a valid 10-digit mobile number";
+        return;
+      }
+
+      saveBtn.disabled = true;
+      msg.textContent = "Saving your profile...";
+
+      const { error } = await supabase.rpc("complete_exam_profile", {
+        _display_name: name,
+        _mobile: mobile
+      });
+
+      if (error) {
+        saveBtn.disabled = false;
+        msg.className = "error";
+        msg.textContent = error.message;
+        return;
+      }
+
+      const { data: p, error: e } = await supabase
+        .from("profiles")
+        .select("display_name,mobile,is_admin")
+        .eq("id", (await supabase.auth.getUser()).data.user.id)
+        .maybeSingle();
+
+      if (e || !p?.display_name || !p?.mobile) {
+        saveBtn.disabled = false;
+        msg.className = "error";
+        msg.textContent = e?.message || "Profile save could not be verified.";
+        return;
+      }
+
+      route(p, (await supabase.auth.getSession()).data.session);
+    };
+
+    init();
+  </script>
+</body>
+</html>
