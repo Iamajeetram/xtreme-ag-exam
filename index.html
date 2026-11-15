@@ -1,25 +1,593 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Exam | Xtreme AG Apps</title>
-<link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
-<link rel="apple-touch-icon" href="./favicon.png">
-<style>
-:root{--bg:#f6f9fc;--card:#fff;--line:#e4e9f0;--text:#14213d;--muted:#667085;--blue:#2563eb;--blue2:#1d4ed8;--green:#059669;--shadow:0 16px 45px rgba(15,23,42,.08)}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,rgba(37,99,235,.10),transparent 30%),linear-gradient(180deg,#fff 0,#f6f9fc 70%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-a{color:inherit;text-decoration:none}button,input{font:inherit}header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
-.nav{width:min(1180px,92%);margin:auto;min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-weight:900;letter-spacing:-.03em;font-size:18px}.brand b{color:var(--blue)}nav{display:flex;gap:18px;font-size:14px;color:#475467}nav a:hover{color:var(--blue)}
-.wrap{width:min(1180px,92%);margin:auto}.hero{padding:72px 0 35px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}h1{font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-.055em;margin:14px 0}h1 span{color:var(--blue)}.lead{max-width:720px;color:var(--muted);font-size:18px;line-height:1.7}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;padding:28px 0 75px}.tile{display:block;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:var(--shadow);transition:.2s;position:relative;overflow:hidden}.tile:hover{transform:translateY(-4px);border-color:#b9cdfc}.icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#eef4ff;color:var(--blue);font-size:25px;margin-bottom:22px}.tile h2{margin:0 0 8px;font-size:25px}.tile p{margin:0;color:var(--muted);line-height:1.6}.arrow{position:absolute;right:25px;top:25px;color:var(--blue);font-size:22px}.tag{display:inline-block;margin-top:20px;padding:7px 10px;border-radius:999px;background:#eff6ff;color:var(--blue);font-size:11px;font-weight:800}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:28px}.form{max-width:500px;margin:45px auto 80px}label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}input{width:100%;padding:13px 14px;border:1px solid #d8dee8;border-radius:12px;background:#fff;color:var(--text);outline:none}input:focus{border-color:#7da2f7;box-shadow:0 0 0 4px #2563eb14}.btn{border:0;border-radius:12px;padding:13px 17px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer}.btn:hover{background:var(--blue2)}.btn.secondary{background:#eef4ff;color:var(--blue)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.msg{margin-top:15px;padding:12px 14px;border-radius:12px;background:#f1f5f9;color:#475467;font-size:14px;display:none}.msg.show{display:block}.muted{color:var(--muted)}.user-table{width:100%;border-collapse:collapse;margin-top:18px}.user-table th,.user-table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.user-table th{color:#667085;background:#f8fafc}footer{border-top:1px solid var(--line);padding:28px;color:#7b8495;font-size:12px;background:#fff}
-@media(max-width:760px){nav{gap:10px}nav a:nth-child(3){display:none}.grid{grid-template-columns:1fr}.hero{padding-top:55px}.tile{padding:24px}}
-</style></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Exam Portal | Xtreme AG Apps</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --indigo: #4f46e5;
+      --wa: #16a34a;
+      --wa-dark: #15803d;
+      --gold: #d97706;
+      --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
+      --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+      --shadow-hover: 0 25px 60px rgba(37, 99, 235, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(37, 99, 235, 0.10), transparent 32%),
+        radial-gradient(circle at 88% 18%, rgba(79, 70, 229, 0.08), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* Header / Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(1180px, 92%);
+      margin: auto;
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 19px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .brand b { color: var(--blue); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: var(--wa-dark);
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .wa-btn:hover {
+      background: var(--wa);
+      color: #fff;
+      border-color: var(--wa);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.22);
+    }
+
+    .login-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--text);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .login-btn:hover {
+      background: var(--blue);
+      transform: translateY(-1px);
+    }
+
+    .wrap {
+      width: min(1180px, 92%);
+      margin: auto;
+      flex: 1;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 56px 0 36px;
+      text-align: center;
+      max-width: 840px;
+      margin: auto;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      margin: 18px 0 16px;
+      font-weight: 800;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(16px, 2.2vw, 19px);
+      line-height: 1.65;
+      margin: 0 auto 28px;
+      max-width: 680px;
+    }
+
+    .highlights {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Main Portal Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 26px;
+      padding: 24px 0 45px;
+    }
+
+    .tile {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--blue), var(--indigo));
+    }
+
+    .tile.notes-card::before {
+      background: linear-gradient(90deg, #059669, #10b981);
+    }
+
+    .tile:hover {
+      transform: translateY(-6px);
+      border-color: #93c5fd;
+      box-shadow: var(--shadow-hover);
+    }
+
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      color: var(--blue);
+      font-size: 28px;
+    }
+
+    .notes-card .icon {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      color: #059669;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: var(--blue);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .notes-card .tag {
+      background: #ecfdf5;
+      color: #059669;
+    }
+
+    .tile h2 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      letter-spacing: -0.02em;
+    }
+
+    .tile p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 15.5px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .feature-list li span {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .notes-card .feature-list li span {
+      color: #059669;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .tile:hover .card-cta {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    .tile.notes-card:hover .card-cta {
+      background: #059669;
+      border-color: #059669;
+    }
+
+    /* Support Banner */
+    .support-banner {
+      margin: 10px 0 65px;
+      padding: 28px 32px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .support-info h3 {
+      margin: 0 0 6px;
+      font-size: 21px;
+    }
+
+    .support-info p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14.5px;
+    }
+
+    .wa-cta-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 14px;
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 800;
+      font-size: 15px;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+    }
+
+    .wa-cta-large:hover {
+      background: #4ade80;
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: #64748b;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .footer-inner {
+      width: min(1180px, 92%);
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      color: var(--blue);
+    }
+
+    /* Floating WhatsApp Button */
+    .wa-float {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 90;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      background: #16a34a;
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.38);
+      transition: transform 0.2s ease;
+    }
+
+    .wa-float:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 780px) {
+      .grid { grid-template-columns: 1fr; gap: 20px; }
+      .hero { padding: 40px 0 24px; }
+      .tile { padding: 26px; }
+      .support-banner { padding: 24px; text-align: left; }
+      .wa-btn span.hide-sm { display: none; }
+      .wa-float span { display: none; }
+      .wa-float { padding: 14px; border-radius: 50%; }
+    }
+  </style>
+</head>
 <body>
-<header><div class="nav"><a class="brand" href="./">XTREME <b>AG APPS</b></a><nav><a href="./">Home</a><a href="./#portal">Portals</a><a href="https://xtremeagapps.in/">Main Site</a></nav></div></header>
-<main class="wrap">
-<section class="hero"><div class="eyebrow">Xtreme AG Apps · Exam</div><h1>Study. <span>Practice. Perform.</span></h1><p class="lead"></p></section>
-<section id="portal" class="grid">
-<a class="tile" href="./auth.html?portal=tests"><span class="arrow">→</span><div class="icon">📝</div><h2>Test Series Portal</h2><p>Practice tests, attempt history, scoring and results. Login is required before entering the test portal.</p><span class="tag">3 SERIES AVAILABLE NOW</span></a>
-<a class="tile" href="./notes.html"><span class="arrow">→</span><div class="icon">📚</div><h2>Notes / Study Material Portal</h2><p>Subject-wise notes, PDFs and study material. This section will be connected after the test portal.</p><span class="tag">STUDY MATERIAL</span></a>
-</section>
-</main><footer><div class="wrap">© 2026 Xtreme AG Apps · exam.xtremeagapps.in</div></footer>
-</body></html>
+
+  <!-- Header -->
+  <header>
+    <div class="nav">
+      <a class="brand" href="./">
+        <div class="brand-logo">X</div>
+        <div>XTREME <b>AG APPS</b></div>
+      </a>
+      <div class="nav-actions">
+        <a class="wa-btn" href="https://wa.me/917878025556?text=Hello%20Xtreme%20AG%20Apps%20Support%2C%20mujhe%20Exam%20Portal%20ke%20baare%20mein%20jaankari%20chahiye." target="_blank" rel="noopener">
+          <span>💬</span>
+          <span>WhatsApp <span class="hide-sm">Support</span></span>
+        </a>
+        <a class="login-btn" href="./auth.html">Sign In →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="wrap">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="badge-pill">
+        <span class="pulse"></span>
+        RPSC • RAS Prelims • 2nd Grade • Raj GK
+      </div>
+      <h1>Study. <span>Practice. Perform.</span></h1>
+      <p class="lead">
+        Rajasthan competitive exams ke liye dedicated Test Series aur Exam-Oriented Study Material portal. Real exam pattern par practice karein aur apni taiyari ko next level par le jayein.
+      </p>
+      <div class="highlights">
+        <div class="chip">✅ Latest RPSC Exam Pattern</div>
+        <div class="chip">⚡ Instant Score & Analysis</div>
+        <div class="chip">📖 Topic-wise PDF Notes</div>
+      </div>
+    </section>
+
+    <!-- Portals Grid -->
+    <section id="portal" class="grid">
+      <!-- Test Series Card -->
+      <a class="tile" href="./auth.html?portal=tests">
+        <div>
+          <div class="tile-top">
+            <div class="icon">📝</div>
+            <span class="tag">3 SERIES LIVE NOW</span>
+          </div>
+          <h2>Test Series Portal</h2>
+          <p>
+            Full-length aur topic-wise practice tests dein, apni attempt history dekhein aur instant scoring ke saath accuracy analyze karein.
+          </p>
+          <ul class="feature-list">
+            <li><span>✓</span> Raj GK, RAS Prelims & RPSC 2nd Grade</li>
+            <li><span>✓</span> Detailed Score Card & Attempt History</li>
+            <li><span>✓</span> Bilingual & Exam-Standard Questions</li>
+          </ul>
+        </div>
+        <div class="card-cta">
+          <span>Enter Test Portal</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Notes / Study Material Card -->
+      <a class="tile notes-card" href="./notes.html">
+        <div>
+          <div class="tile-top">
+            <div class="icon">📚</div>
+            <span class="tag">STUDY MATERIAL & PDFS</span>
+          </div>
+          <h2>Notes & Study Material</h2>
+          <p>
+            Subject-wise crisp revision notes, curated PDFs aur exam-focused study material. Free samples aur premium notes ek hi jagah par.
+          </p>
+          <ul class="feature-list">
+            <li><span>✓</span> Subject-wise Organized Crisp Notes</li>
+            <li><span>✓</span> High-Yield Facts & Revision PDFs</li>
+            <li><span>✓</span> Direct & Secure Drive Access</li>
+          </ul>
+        </div>
+        <div class="card-cta">
+          <span>Explore Study Notes</span>
+          <span>→</span>
+        </div>
+      </a>
+    </section>
+
+    <!-- WhatsApp Support Banner -->
+    <section class="support-banner">
+      <div class="support-info">
+        <h3>Need Help with Test Series, Notes or Payment?</h3>
+        <p>Kisi bhi technical help, course inquiry ya access activation ke liye humse seedha WhatsApp par judein.</p>
+      </div>
+      <a class="wa-cta-large" href="https://wa.me/917878025556?text=Hello%20Sir%2C%20mujhe%20Xtreme%20Exam%20Portal%20par%20help%20chahiye." target="_blank" rel="noopener">
+        <span>📲</span>
+        <span>Chat on WhatsApp: 7878025556</span>
+      </a>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div>© 2026 Xtreme AG Apps · <strong>exam.xtremeagapps.in</strong></div>
+      <div class="footer-links">
+        <a href="./auth.html">Student Login</a>
+        <a href="./notes.html">Notes Portal</a>
+        <a href="https://wa.me/917878025556" target="_blank" rel="noopener">Support: +91 7878025556</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Shortcut -->
+  <a class="wa-float" href="https://wa.me/917878025556?text=Hello%20Xtreme%20AG%20Apps%2C%20I%20have%20a%20query." target="_blank" rel="noopener" title="WhatsApp Support">
+    <span>💬</span>
+    <span>Help: 7878025556</span>
+  </a>
+
+</body>
+</html>
