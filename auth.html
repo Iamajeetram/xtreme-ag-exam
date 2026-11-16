@@ -17,13 +17,12 @@
       --text: #0f172a;
       --muted: #475569;
       --blue: #2563eb;
-      --blue-dark: #1d4ed8;
       --indigo: #4f46e5;
       --wa: #16a34a;
       --shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -40,7 +39,6 @@
 
     a { color: inherit; text-decoration: none; }
 
-    /* Top Minimal Bar */
     header {
       width: min(1140px, 92%);
       margin: 0 auto;
@@ -48,6 +46,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
+      z-index: 10;
     }
 
     .brand {
@@ -77,28 +77,24 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 14px;
+      padding: 9px 15px;
       border-radius: 999px;
       background: #fff;
       border: 1px solid var(--line);
       font-size: 13px;
       font-weight: 700;
       color: var(--muted);
-      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    .back-btn:hover {
-      border-color: var(--blue);
-      color: var(--blue);
-    }
-
-    /* Main Auth Container */
     .auth-wrap {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      position: relative;
+      z-index: 10;
     }
 
     .card {
@@ -106,7 +102,7 @@
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 28px;
-      padding: 38px 32px;
+      padding: 38px 30px;
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
@@ -116,9 +112,12 @@
     .card::before {
       content: "";
       position: absolute;
-      inset: 0 0 auto;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 6px;
       background: linear-gradient(90deg, var(--blue), var(--indigo));
+      pointer-events: none;
     }
 
     .motif-badge {
@@ -138,20 +137,18 @@
 
     h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 27px;
       font-weight: 800;
       letter-spacing: -0.03em;
-      color: var(--text);
     }
 
     .sub {
       color: var(--muted);
       font-size: 14.5px;
       line-height: 1.6;
-      margin: 10px 0 26px;
+      margin: 10px 0 24px;
     }
 
-    /* Perks Box */
     .perks {
       background: #f8fafc;
       border: 1px solid var(--line);
@@ -177,55 +174,103 @@
       font-weight: 800;
     }
 
-    /* Google Sign-In Button */
     .google-btn {
+      position: relative;
+      z-index: 20;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      border: 1px solid #cbd5e1;
+      border: 1.5px solid #cbd5e1;
       background: #ffffff;
       color: var(--text);
       border-radius: 16px;
-      padding: 15px 18px;
+      padding: 16px 18px;
       font-family: inherit;
-      font-size: 15.5px;
+      font-size: 16px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+      touch-action: manipulation;
+      user-select: none;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
       transition: all 0.2s ease;
     }
 
-    .google-btn:hover:not(:disabled) {
+    .google-btn:hover, .google-btn:active {
       border-color: var(--blue);
       background: #f8fafc;
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.12);
+      transform: translateY(-1px);
     }
 
     .google-btn:disabled {
       opacity: 0.65;
-      cursor: not-allowed;
+      cursor: wait;
     }
 
     .google-icon {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    /* Already Logged In Box */
+    .session-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      text-align: center;
+    }
+
+    .session-box p {
+      margin: 0 0 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .session-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .continue-btn {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 800;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .logout-btn {
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #fff;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .status {
       min-height: 22px;
-      margin-top: 16px;
+      margin-top: 15px;
       font-size: 13.5px;
       font-weight: 600;
       color: var(--blue);
     }
 
-    .status.error {
-      color: #dc2626;
-    }
+    .status.error { color: #dc2626; }
 
     .divider {
       height: 1px;
@@ -244,20 +289,8 @@
     }
 
     .wa-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
       color: var(--wa);
       font-weight: 700;
-    }
-
-    .wa-link:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 480px) {
-      .card { padding: 30px 22px; }
-      .help-row { justify-content: center; }
     }
   </style>
 </head>
@@ -285,7 +318,7 @@
         <div class="perk-item"><span>✓</span> One-click secure Google authentication</div>
       </div>
 
-      <button id="googleBtn" class="google-btn" type="button">
+      <button id="googleBtn" class="google-btn" type="button" onclick="startGoogle()">
         <svg class="google-icon" viewBox="0 0 24 24">
           <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
           <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
@@ -294,6 +327,15 @@
         </svg>
         <span id="btnText">Continue with Google</span>
       </button>
+
+      <!-- Session Box if already signed in -->
+      <div id="sessionBox" class="session-box">
+        <p id="sessionUserText">Signed in</p>
+        <div class="session-actions">
+          <button id="continuePortalBtn" class="continue-btn" type="button">Go to Portal →</button>
+          <button id="signOutBtn" class="logout-btn" type="button">Sign Out</button>
+        </div>
+      </div>
 
       <div id="status" class="status"></div>
 
@@ -312,59 +354,79 @@
   <script>
     const SUPABASE_URL = "https://vbfjafblxnrfminbdlbb.supabase.co";
     const SUPABASE_KEY = "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const statusEl = document.getElementById("status");
     const btn = document.getElementById("googleBtn");
     const btnText = document.getElementById("btnText");
+    const sessionBox = document.getElementById("sessionBox");
+    const sessionUserText = document.getElementById("sessionUserText");
+    const continuePortalBtn = document.getElementById("continuePortalBtn");
+    const signOutBtn = document.getElementById("signOutBtn");
 
     async function startGoogle() {
-      btn.disabled = true;
-      btnText.textContent = "Connecting to Google...";
-      statusEl.className = "status";
-      statusEl.textContent = "Redirecting to secure Google Sign-In...";
+      try {
+        btn.disabled = true;
+        btnText.textContent = "Opening Google...";
+        statusEl.className = "status";
+        statusEl.textContent = "Redirecting to Google Sign-In...";
 
-      const r = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://exam.xtremeagapps.in/auth.html"
-        }
-      });
+        const { error } = await sb.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/auth.html"
+          }
+        });
 
-      if (r.error) {
+        if (error) throw error;
+      } catch (err) {
         btn.disabled = false;
         btnText.textContent = "Continue with Google";
         statusEl.className = "status error";
-        statusEl.textContent = r.error.message;
+        statusEl.textContent = err.message || "Could not open Google login.";
       }
     }
 
-    btn.addEventListener("click", startGoogle);
+    async function checkExistingSession() {
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) return;
 
-    async function route() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
+        statusEl.textContent = "Checking your profile...";
+        const email = (session.user.email || "").toLowerCase().trim();
 
-      statusEl.textContent = "Verifying your profile...";
-      btn.disabled = true;
+        const { data: p, error: pErr } = await sb
+          .from("profiles")
+          .select("display_name,mobile,is_admin")
+          .eq("id", session.user.id)
+          .maybeSingle();
 
-      const email = (session.user.email || "").toLowerCase().trim();
-      const { data: p } = await supabase
-        .from("profiles")
-        .select("display_name,mobile,is_admin")
-        .eq("id", session.user.id)
-        .maybeSingle();
+        let targetUrl = "./complete-profile.html";
+        if (email === "ajeetram3@gmail.com" && p?.is_admin === true) {
+          targetUrl = "./admin.html";
+        } else if (p?.display_name && p?.mobile) {
+          targetUrl = "./test-portal.html";
+        }
 
-      if (email === "ajeetram3@gmail.com" && p?.is_admin === true) {
-        location.href = "./admin.html";
-      } else if (p?.display_name && p?.mobile) {
-        location.href = "./test-portal.html";
-      } else {
-        location.href = "./complete-profile.html";
+        // Show manual fallback buttons in case redirect is blocked
+        sessionBox.style.display = "block";
+        sessionUserText.textContent = "Logged in as: " + (p?.display_name || email);
+        continuePortalBtn.onclick = () => { window.location.href = targetUrl; };
+        signOutBtn.onclick = async () => {
+          await sb.auth.signOut({ scope: "local" });
+          window.location.reload();
+        };
+
+        // Auto redirect
+        window.location.href = targetUrl;
+      } catch (e) {
+        console.error(e);
+        btn.disabled = false;
+        statusEl.textContent = "";
       }
     }
 
-    route();
+    checkExistingSession();
   </script>
 </body>
 </html>
