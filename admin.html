@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Command Center | Xtreme AG Apps</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #111827;
+      --card2: #1e293b;
+      --line: rgba(255, 255, 255, 0.1);
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --red: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 15% 0%, rgba(59, 130, 246, 0.12), transparent 35%), var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 13, 22, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(1240px, 94%);
+      margin: auto;
+      min-height: 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--gold), #d97706);
+      color: #000;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .logout-btn {
+      padding: 9px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover { background: var(--red); color: #fff; }
+
+    main {
+      width: min(1240px, 94%);
+      margin: auto;
+      padding: 30px 0 70px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 20px;
+    }
+
+    .stat-card span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+    .stat-card strong { display: block; font-size: 28px; margin-top: 6px; color: var(--gold-light); }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .tab-btn {
+      padding: 15px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.2s;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--blue), #2563eb);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+    }
+
+    .panel h2 { margin: 0 0 6px; font-size: 21px; }
+    .panel p.sub { margin: 0 0 20px; color: var(--muted); font-size: 13.5px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .full-col { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 7px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #0b1120;
+      color: var(--text);
+      font-size: 14.5px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+
+    /* HTML File Upload Dropzone */
+    .html-upload-box {
+      border: 2px dashed rgba(59, 130, 246, 0.5);
+      background: rgba(59, 130, 246, 0.06);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .html-upload-info h3 { margin: 0 0 5px; font-size: 16.5px; color: #60a5fa; }
+    .html-upload-info p { margin: 0; font-size: 13px; color: var(--muted); }
+
+    .file-label-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      padding: 14px 24px;
+      border-radius: 12px;
+      border: 0;
+      background: linear-gradient(135deg, var(--gold), #d97706);
+      color: #000;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .sec-btn {
+      padding: 10px 15px;
+      border-radius: 11px;
+      border: 1px solid var(--line);
+      background: var(--card2);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .del-btn {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .custom-cat-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--line); font-size: 14px; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; background: rgba(255, 255, 255, 0.03); }
+
+    .student-row { cursor: pointer; transition: background 0.15s; }
+    .student-row:hover { background: rgba(59, 130, 246, 0.1); }
+    .clickable-name { color: #60a5fa; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
+
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 800; }
+    .pill.live { background: rgba(16, 185, 129, 0.16); color: #34d399; }
+    .pill.upcoming { background: rgba(245, 158, 11, 0.16); color: #fbbf24; }
+
+    .q-box {
+      background: #0b1120;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    .q-item {
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 200;
+    }
+
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(740px, 100%);
+      max-height: 86vh;
+      overflow-y: auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 26px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+
+    .DeniedBox {
+      display: none;
+      max-width: 520px;
+      margin: 80px auto;
+      padding: 36px;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 22px;
+    }
+
+    @media (max-width: 780px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .tabs { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <a class="logo" href="./">
+        <div class="mark">X</div>
+        <div>Xtreme <span style="color:var(--gold-light)">Admin</span></div>
+      </a>
+      <div class="nav-right">
+        <a class="nav-btn" href="./test-portal.html">View Test Portal</a>
+        <a class="nav-btn" href="./notes.html">View Notes</a>
+        <button type="button" class="logout-btn" id="logoutBtn" onclick="forceSignOut()">Sign Out ⏻</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="adminContent" style="display:none">
+      <div class="top-bar">
+        <div>
+          <div class="admin-badge">✓ Verified Administrator: <span id="adminEmailText"></span></div>
+          <h1 style="margin:10px 0 0;font-size:28px">Xtreme Exam Control Panel</h1>
+        </div>
+        <button class="sec-btn" onclick="loadAllData()">↻ Refresh Data</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><span>Registered Students</span><strong id="countStudents">0</strong></div>
+        <div class="stat-card"><span>Total Test Attempts</span><strong id="countAttempts">0</strong></div>
+        <div class="stat-card"><span>Published / Upcoming Tests</span><strong id="countTests">0</strong></div>
+        <div class="stat-card"><span>Study Notes / PDFs</span><strong id="countNotes">0</strong></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('usersTab', this)">👥 1. Students & Scores</button>
+        <button class="tab-btn" onclick="switchTab('testsTab', this)">📋 2. Upload & Manage Tests</button>
+        <button class="tab-btn" onclick="switchTab('notesTab', this)">📚 3. Upload & Manage Notes</button>
+      </div>
+
+      <!-- TAB 1: USERS & SCORES -->
+      <div id="usersTab" class="tab-panel active">
+        <div class="panel">
+          <h2>Registered Students Directory</h2>
+          <p class="sub">Kisi bhi student ke <strong>Name</strong> par tap karke uske saare attempted tests aur detailed scores dekhein.</p>
+          <div style="margin-bottom:16px">
+            <input id="studentSearch" placeholder="🔍 Search student by Name, Mobile or Email..." oninput="renderUsersTable()">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student Name (Tap for Scores)</th>
+                  <th>Mobile Number</th>
+                  <th>Email ID</th>
+                  <th>Tests Given</th>
+                  <th>Joined Date</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="6" style="text-align:center;color:var(--muted)">Loading students...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: UPLOAD & MANAGE TESTS -->
+      <div id="testsTab" class="tab-panel">
+        <div class="panel">
+          <h2>Create New Test / Upload HTML Test File</h2>
+          <p class="sub">Apनी sample `.html` file seedha upload karein ya custom category bana kar Live / Coming Soon test add karein.</p>
+
+          <!-- Direct HTML Sample File Importer -->
+          <div class="html-upload-box">
+            <div class="html-upload-info">
+              <h3>📂 Quick Import from Sample HTML Test File (.html)</h3>
+              <p id="htmlParseStatus">Apni RPSC/RAS mock test wali `.html` file chunein — saare questions, options (5 options) aur explanations auto-load ho jayenge!</p>
+            </div>
+            <label class="file-label-btn">
+              <span>⬆️ Select .HTML File</span>
+              <input type="file" id="htmlFileInput" accept=".html,.htm" style="display:none" onchange="handleHtmlTestFile(this)">
+            </label>
+          </div>
+
+          <div class="form-grid">
+            <div>
+              <label>Select Exam Category (or Add New below)</label>
+              <select id="tExam"></select>
+              <div class="custom-cat-bar">
+                <input id="newTestCatInput" placeholder="+ Type new Exam Category name (e.g. RPSC 1st Grade)">
+                <button type="button" class="sec-btn" onclick="addCustomExamCategory('newTestCatInput')">+ Add</button>
+              </div>
+            </div>
+
+            <div>
+              <label>Subject / Paper Name</label>
+              <input id="tSubject" placeholder="e.g. Full Syllabus Mock, Raj History & Art, Paper-I">
+            </div>
+
+            <div class="full-col">
+              <label>Test Title</label>
+              <input id="tTitle" placeholder="e.g. RPSC RAS & Sub-Inspector Comprehensive Mock #01">
+            </div>
+
+            <div>
+              <label>Test Status (Live or Coming Soon)</label>
+              <select id="tStatus">
+                <option value="live">🟢 Live Now (Students can attempt)</option>
+                <option value="upcoming">⏳ Coming Soon (Show release date)</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Test Date / Coming Soon Release Date</label>
+              <input type="date" id="tDate">
+            </div>
+
+            <div>
+              <label>Duration (Minutes)</label>
+              <input type="number" id="tDuration" value="180">
+            </div>
+
+            <div>
+              <label>Total Marks (Auto-calculated or Custom)</label>
+              <input type="number" id="tMarks" value="200">
+            </div>
+          </div>
+
+          <!-- Manual Question Builder + Preview of Imported Questions -->
+          <div class="q-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+              <h3 style="margin:0;font-size:16px">Questions in this Test (<span id="qCountBadge" style="color:var(--gold-light)">0</span> loaded)</h3>
+              <button type="button" class="sec-btn" onclick="toggleManualBuilder()">+ Add Question Manually</button>
+            </div>
+
+            <div id="manualQForm" style="display:none;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+              <div class="form-grid">
+                <div class="full-col">
+                  <label>Question Text (HTML / Hindi / MathJax supported)</label>
+                  <textarea id="qText" rows="2" placeholder="Write the question here..."></textarea>
+                </div>
+                <div><label>Option 1</label><input id="qOptA" placeholder="Option 1"></div>
+                <div><label>Option 2</label><input id="qOptB" placeholder="Option 2"></div>
+                <div><label>Option 3</label><input id="qOptC" placeholder="Option 3"></div>
+                <div><label>Option 4</label><input id="qOptD" placeholder="Option 4"></div>
+                <div><label>Option 5 (RPSC 5th Option)</label><input id="qOptE" value="अनुत्तरित प्रश्न"></div>
+                <div>
+                  <label>Correct Answer</label>
+                  <select id="qAns">
+                    <option value="0">Option 1</option>
+                    <option value="1">Option 2</option>
+                    <option value="2">Option 3</option>
+                    <option value="3">Option 4</option>
+                  </select>
+                </div>
+                <div class="full-col">
+                  <label>Detailed Explanation (व्याख्या)</label>
+                  <input id="qExp" placeholder="Detailed explanation for result screen">
+                </div>
+              </div>
+              <div style="margin-top:12px;display:flex;gap:10px">
+                <button type="button" class="sec-btn" onclick="addQuestionToDraft()">+ Add Question to List</button>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-bottom:10px">
+              <button type="button" class="del-btn" onclick="clearDraftQuestions()">🗑️ Clear All Loaded Questions</button>
+            </div>
+
+            <div id="draftQuestionsList" style="max-height:320px;overflow-y:auto"></div>
+          </div>
+
+          <div style="margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <button type="button" class="primary-btn" onclick="publishTest()">🚀 Save & Publish Test to Portal</button>
+            <span id="testSaveMsg" style="font-size:14px;font-weight:700;color:#34d399"></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>All Published & Upcoming Tests</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Exam Category</th>
+                  <th>Subject</th>
+                  <th>Test Title</th>
+                  <th>Questions / Marks</th>
+                  <th>Status / Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="testsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: UPLOAD & MANAGE NOTES -->
+      <div id="notesTab" class="tab-panel">
+        <div class="panel">
+          <h2>Publish Study Material / PDF Notes</h2>
+          <p class="sub">Custom Exam Category aur Subject ke hisaab se PDF Notes ya Coming Soon Notes add karein.</p>
+
+          <div class="form-grid">
+            <div>
+              <label>Select Exam Category (or Add New below)</label>
+              <select id="nExam"></select>
+              <div class="custom-cat-bar">
+                <input id="newNoteCatInput" placeholder="+ Type new Exam Category name">
+                <button type="button" class="sec-btn" onclick="addCustomExamCategory('newNoteCatInput')">+ Add</button>
+              </div>
+            </div>
+
+            <div>
+              <label>Subject Name</label>
+              <input id="nSubject" placeholder="e.g. Rajasthan History, Indian Polity, Economic Survey">
+            </div>
+
+            <div class="full-col">
+              <label>Note / PDF Title</label>
+              <input id="nTitle" placeholder="e.g. Complete Rajasthan Economic Survey 2026 Crisp Notes">
+            </div>
+
+            <div class="full-col">
+              <label>Short Description / Highlights</label>
+              <input id="nDesc" placeholder="e.g. Exam-oriented short notes with tables & latest data">
+            </div>
+
+            <div class="full-col">
+              <label>Google Drive / PDF Link (Leave empty if Coming Soon)</label>
+              <input id="nUrl" placeholder="https://drive.google.com/file/d/...">
+            </div>
+
+            <div>
+              <label>Status</label>
+              <select id="nStatus">
+                <option value="live">🟢 Available Now</option>
+                <option value="upcoming">⏳ Coming Soon</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Release / Available Date</label>
+              <input type="date" id="nDate">
+            </div>
+
+            <div>
+              <label>Access Type</label>
+              <select id="nAccess">
+                <option value="free">Free PDF</option>
+                <option value="paid">Premium / Paid Note</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Price in ₹ (0 for Free)</label>
+              <input type="number" id="nPrice" value="0">
+            </div>
+          </div>
+
+          <div style="margin-top:20px;display:flex;align-items:center;gap:14px">
+            <button type="button" class="primary-btn" onclick="publishNote()">📚 Save & Publish Note</button>
+            <span id="noteSaveMsg" style="font-size:14px;font-weight:700;color:#34d399"></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>All Study Notes</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Exam Category</th>
+                  <th>Subject</th>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Status / Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="notesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="deniedBox" class="DeniedBox">
+      <h1 style="color:var(--red);margin-top:0">Access Denied</h1>
+      <p style="color:var(--muted)">This panel is restricted to <strong>ajeetram3@gmail.com</strong>.</p>
+      <div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
+        <a class="sec-btn" href="./auth.html">Go to Sign In</a>
+        <button class="logout-btn" onclick="forceSignOut()">Sign Out</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- STUDENT SCORE MODAL -->
+  <div id="scoreModal" class="modal-backdrop" onclick="if(event.target===this)closeScoreModal()">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h3 id="modalStudentName" style="margin:0;font-size:20px">Student Name</h3>
+          <div id="modalStudentMeta" style="color:var(--muted);font-size:13px;margin-top:4px"></div>
+        </div>
+        <button class="sec-btn" onclick="closeScoreModal()">✕ Close</button>
+      </div>
+      <div id="modalScoresBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://vbfjafblxnrfminbdlbb.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const ADMIN_EMAIL = 'ajeetram3@gmail.com';
+
+    const DEFAULT_CATEGORIES = [
+      { slug: 'ras-si', name: 'RPSC RAS & Sub-Inspector' },
+      { slug: 'raj-gk', name: 'Raj GK (Rajasthan GK)' },
+      { slug: 'ras-prelims', name: 'RPSC RAS Prelims' },
+      { slug: 'rpsc-2nd-grade', name: 'RPSC 2nd Grade' },
+      { slug: 'reet-mains', name: 'REET / 3rd Grade' }
+    ];
+
+    let examCategories = [...DEFAULT_CATEGORIES];
+    let allUsers = [];
+    let allAttempts = [];
+    let allTests = [];
+    let allNotes = [];
+    let draftQuestions = [];
+
+    function slugify(text) {
+      return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'custom-exam';
+    }
+
+    function loadSavedCategories() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('xtreme_custom_categories') || '[]');
+        saved.forEach(c => {
+          if (!examCategories.some(x => x.slug === c.slug)) examCategories.push(c);
+        });
+      } catch (e) {}
+    }
+
+    function syncCategoriesFromDB() {
+      allTests.forEach(t => {
+        if (t.exam_slug && t.exam_name && !examCategories.some(x => x.slug === t.exam_slug)) {
+          examCategories.push({ slug: t.exam_slug, name: t.exam_name });
+        }
+      });
+      allNotes.forEach(n => {
+        if (n.exam_slug && n.exam_name && !examCategories.some(x => x.slug === n.exam_slug)) {
+          examCategories.push({ slug: n.exam_slug, name: n.exam_name });
+        }
+      });
+      renderCategoryDropdowns();
+    }
+
+    function renderCategoryDropdowns(selectedSlug) {
+      const html = examCategories.map(c =>
+        `<option value="${c.slug}|${c.name}" ${selectedSlug === c.slug ? 'selected' : ''}>${c.name}</option>`
+      ).join('');
+      document.getElementById('tExam').innerHTML = html;
+      document.getElementById('nExam').innerHTML = html;
+    }
+
+    function addCustomExamCategory(inputId) {
+      const inp = document.getElementById(inputId);
+      const name = inp.value.trim();
+      if (!name) {
+        alert('Please enter a category name first.');
+        return;
+      }
+      const slug = slugify(name);
+      if (!examCategories.some(c => c.slug === slug)) {
+        examCategories.push({ slug, name });
+        try {
+          const saved = JSON.parse(localStorage.getItem('xtreme_custom_categories') || '[]');
+          saved.push({ slug, name });
+          localStorage.setItem('xtreme_custom_categories', JSON.stringify(saved));
+        } catch (e) {}
+      }
+      renderCategoryDropdowns(slug);
+      inp.value = '';
+    }
+
+    // Parse Uploaded Sample HTML File (Extracts `const questions = [...]`, title, timer)
+    async function handleHtmlTestFile(input) {
+      const file = input.files?.[0];
+      if (!file) return;
+      const statusEl = document.getElementById('htmlParseStatus');
+      statusEl.textContent = `Reading ${file.name}...`;
+
+      try {
+        const text = await file.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+
+        // Extract Title & Subject
+        const h1Text = doc.querySelector('.exam-title h1, h1')?.textContent?.trim();
+        const titleText = doc.querySelector('title')?.textContent?.trim();
+        const subText = doc.querySelector('.exam-title p')?.textContent?.trim();
+
+        if (h1Text || titleText) {
+          document.getElementById('tTitle').value = h1Text || titleText;
+        }
+        if (subText && !document.getElementById('tSubject').value) {
+          document.getElementById('tSubject').value = subText.split('|')[0].trim();
+        } else if (!document.getElementById('tSubject').value) {
+          document.getElementById('tSubject').value = 'Full Syllabus Mock';
+        }
+
+        // Extract remainingSeconds if present
+        const secMatch = text.match(/remainingSeconds\s*=\s*(\d+)/);
+        if (secMatch) {
+          document.getElementById('tDuration').value = Math.round(parseInt(secMatch[1], 10) / 60);
+        }
+
+        // Extract `const questions = [...]` array from script tags
+        let extracted = null;
+        const scripts = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n');
+        const qMatch = scripts.match(/(?:const|let|var)\s+questions\s*=\s*(\[[\s\S]*?\]);/);
+
+        if (qMatch && qMatch[1]) {
+          extracted = new Function('return ' + qMatch[1])();
+        }
+
+        if (!Array.isArray(extracted) || extracted.length === 0) {
+          throw new Error('Could not find `const questions = [...]` array inside this HTML file.');
+        }
+
+        // Normalize into standard format supporting both {q, opt, ans, exp} and {question, options, answer, explanation}
+        draftQuestions = extracted.map(item => ({
+          q: item.q || item.question || '',
+          opt: item.opt || item.options || [],
+          ans: typeof item.ans === 'number' ? item.ans : (parseInt(item.answer, 10) || 0),
+          exp: item.exp || item.explanation || ''
+        }));
+
+        renderDraftQuestions();
+        statusEl.innerHTML = `<strong style="color:#34d399">✅ Successfully loaded ${draftQuestions.length} questions from "${file.name}"!</strong> Now review details below and click Save & Publish.`;
+      } catch (err) {
+        console.error(err);
+        alert('HTML Parse Error: ' + err.message);
+        statusEl.textContent = 'Error reading HTML file. Make sure it contains `const questions = [...]`.';
+      }
+      input.value = '';
+    }
+
+    function toggleManualBuilder() {
+      const el = document.getElementById('manualQForm');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function forceSignOut() {
+      const btn = document.getElementById('logoutBtn');
+      if (btn) btn.textContent = 'Signing out...';
+      try { await sb.auth.signOut({ scope: 'local' }); } catch (e) {}
+      try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
+      window.location.replace('./auth.html');
+    }
+
+    function switchTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btnEl.classList.add('active');
+    }
+
+    async function verifyAdmin() {
+      loadSavedCategories();
+      renderCategoryDropdowns();
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session?.user) {
+          window.location.replace('./auth.html');
+          return;
+        }
+        const email = (session.user.email || '').toLowerCase().trim();
+        const { data: profile } = await sb
+          .from('profiles')
+          .select('display_name,mobile,is_admin')
+          .eq('id', session.user.id)
+          .maybeSingle();
+
+        if (email !== ADMIN_EMAIL || !profile || profile.is_admin !== true) {
+          document.getElementById('deniedBox').style.display = 'block';
+          return;
+        }
+
+        document.getElementById('adminEmailText').textContent = email;
+        document.getElementById('adminContent').style.display = 'block';
+        await loadAllData();
+      } catch (err) {
+        console.error(err);
+        document.getElementById('deniedBox').style.display = 'block';
+      }
+    }
+
+    async function loadAllData() {
+      const [{ data: users }, { data: attempts }, { data: tests }, { data: notes }] = await Promise.all([
+        sb.from('profiles').select('*').order('created_at', { ascending: false }),
+        sb.from('exam_attempts').select('*').order('created_at', { ascending: false }),
+        sb.from('exam_tests').select('*').order('created_at', { ascending: false }),
+        sb.from('exam_notes').select('*').order('created_at', { ascending: false })
+      ]);
+
+      allUsers = users || [];
+      allAttempts = attempts || [];
+      allTests = tests || [];
+      allNotes = notes || [];
+
+      syncCategoriesFromDB();
+
+      document.getElementById('countStudents').textContent = allUsers.length;
+      document.getElementById('countAttempts').textContent = allAttempts.length;
+      document.getElementById('countTests').textContent = allTests.length;
+      document.getElementById('countNotes').textContent = allNotes.length;
+
+      renderUsersTable();
+      renderTestsTable();
+      renderNotesTable();
+    }
+
+    function renderUsersTable() {
+      const q = (document.getElementById('studentSearch').value || '').toLowerCase().trim();
+      const tbody = document.getElementById('usersTableBody');
+
+      const filtered = allUsers.filter(u => {
+        const name = (u.display_name || '').toLowerCase();
+        const mob = (u.mobile || '').toLowerCase();
+        const em = (u.email || '').toLowerCase();
+        return !q || name.includes(q) || mob.includes(q) || em.includes(q);
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No registered students found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((u, idx) => {
+        const userAttempts = allAttempts.filter(a => a.user_id === u.id);
+        const dt = u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN') : '-';
+        return `
+          <tr class="student-row" onclick="openStudentScores('${u.id}')">
+            <td>${idx + 1}</td>
+            <td><span class="clickable-name">👤 ${u.display_name || 'Incomplete Profile'} ↗</span></td>
+            <td>${u.mobile ? '<a href="https://wa.me/91'+u.mobile+'" target="_blank" onclick="event.stopPropagation()" style="color:#34d399;font-weight:700">📱 '+u.mobile+'</a>' : '-'}</td>
+            <td>${u.email || '-'}</td>
+            <td><span class="pill live">${userAttempts.length} Tests</span></td>
+            <td>${dt}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openStudentScores(userId) {
+      const user = allUsers.find(u => u.id === userId);
+      if (!user) return;
+      const userAttempts = allAttempts.filter(a => a.user_id === userId);
+      document.getElementById('modalStudentName').textContent = user.display_name || 'Student';
+      document.getElementById('modalStudentMeta').textContent =
+        `Mobile: ${user.mobile || 'N/A'}  •  Email: ${user.email || 'N/A'}  •  Total Attempts: ${userAttempts.length}`;
+
+      const body = document.getElementById('modalScoresBody');
+      if (!userAttempts.length) {
+        body.innerHTML = `<div style="padding:28px;text-align:center;color:var(--muted)">Is student ne abhi tak koi test attempt nahi kiya hai.</div>`;
+      } else {
+        body.innerHTML = `
+          <div class="table-wrap">
+            <table style="min-width:100%">
+              <thead>
+                <tr>
+                  <th>Test Name</th>
+                  <th>Category / Subject</th>
+                  <th>Net Score</th>
+                  <th>Correct / Wrong / Skipped</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${userAttempts.map(a => `
+                  <tr>
+                    <td><strong>${a.test_title || 'Mock Test'}</strong></td>
+                    <td>${a.exam_name || ''} • ${a.subject || ''}</td>
+                    <td><span class="pill live">${Number(a.score).toFixed(2)} / ${a.total_marks}</span></td>
+                    <td>✅ ${a.correct_count} | ❌ ${a.wrong_count} | ⚪ ${a.unattempted_count || 0}</td>
+                    <td>${new Date(a.created_at).toLocaleString('en-IN')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      document.getElementById('scoreModal').classList.add('open');
+    }
+
+    function closeScoreModal() {
+      document.getElementById('scoreModal').classList.remove('open');
+    }
+
+    function addQuestionToDraft() {
+      const q = document.getElementById('qText').value.trim();
+      const a = document.getElementById('qOptA').value.trim();
+      const b = document.getElementById('qOptB').value.trim();
+      const c = document.getElementById('qOptC').value.trim();
+      const d = document.getElementById('qOptD').value.trim();
+      const e = document.getElementById('qOptE').value.trim();
+      const ans = parseInt(document.getElementById('qAns').value, 10);
+      const exp = document.getElementById('qExp').value.trim();
+
+      if (!q || !a || !b || !c || !d) {
+        alert('Please fill Question and at least 4 Options.');
+        return;
+      }
+
+      const opt = e ? [a, b, c, d, e] : [a, b, c, d];
+      draftQuestions.push({ q, opt, ans, exp });
+
+      document.getElementById('qText').value = '';
+      document.getElementById('qOptA').value = '';
+      document.getElementById('qOptB').value = '';
+      document.getElementById('qOptC').value = '';
+      document.getElementById('qOptD').value = '';
+      document.getElementById('qExp').value = '';
+      renderDraftQuestions();
+    }
+
+    function clearDraftQuestions() {
+      draftQuestions = [];
+      renderDraftQuestions();
+    }
+
+    function removeDraftQuestion(i) {
+      draftQuestions.splice(i, 1);
+      renderDraftQuestions();
+    }
+
+    function renderDraftQuestions() {
+      document.getElementById('qCountBadge').textContent = draftQuestions.length;
+      const box = document.getElementById('draftQuestionsList');
+      if (!draftQuestions.length) {
+        box.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:8px 0">No questions loaded yet. Upload an .html test file above or add manually.</div>`;
+        return;
+      }
+      box.innerHTML = draftQuestions.slice(0, 50).map((item, idx) => {
+        const qText = item.q || item.question || '';
+        const opts = item.opt || item.options || [];
+        const ansIdx = typeof item.ans === 'number' ? item.ans : item.answer;
+        return `
+          <div class="q-item">
+            <div style="font-size:13.5px">
+              <strong>Q${idx + 1}:</strong> ${qText.substring(0, 140)}${qText.length > 140 ? '...' : ''}
+              <div style="font-size:12px;color:var(--muted);margin-top:4px">
+                Options: ${opts.length} • <span style="color:#34d399">Correct: (${ansIdx + 1}) ${opts[ansIdx] || ''}</span>
+              </div>
+            </div>
+            <button type="button" class="del-btn" onclick="removeDraftQuestion(${idx})">✕</button>
+          </div>
+        `;
+      }).join('') + (draftQuestions.length > 50 ? `<div style="padding:10px;text-align:center;color:var(--gold-light);font-size:13px">+ ${draftQuestions.length - 50} more questions loaded ready to publish!</div>` : '');
+    }
+
+    async function publishTest() {
+      const [exam_slug, exam_name] = document.getElementById('tExam').value.split('|');
+      const subject = document.getElementById('tSubject').value.trim();
+      const title = document.getElementById('tTitle').value.trim();
+      const status = document.getElementById('tStatus').value;
+      const scheduled_date = document.getElementById('tDate').value || null;
+      const duration_minutes = parseInt(document.getElementById('tDuration').value, 10) || 180;
+      const total_marks = parseFloat(document.getElementById('tMarks').value) || 200;
+      const msg = document.getElementById('testSaveMsg');
+
+      if (!subject || !title) {
+        alert('Please enter Subject and Test Title.');
+        return;
+      }
+
+      if (status === 'live' && draftQuestions.length === 0) {
+        alert('Live test ke liye upr se .HTML file upload karein ya question add karein (ya status "Coming Soon" rakhein).');
+        return;
+      }
+
+      msg.textContent = 'Publishing test...';
+      const { error } = await sb.from('exam_tests').insert([{
+        exam_slug,
+        exam_name,
+        subject,
+        title,
+        status,
+        scheduled_date,
+        duration_minutes,
+        total_marks,
+        questions: draftQuestions
+      }]);
+
+      if (error) {
+        alert('Error: ' + error.message);
+        msg.textContent = '';
+        return;
+      }
+
+      msg.textContent = `✓ Test Published (${draftQuestions.length} Questions)!`;
+      document.getElementById('tTitle').value = '';
+      clearDraftQuestions();
+      await loadAllData();
+      setTimeout(() => { msg.textContent = ''; }, 4000);
+    }
+
+    function renderTestsTable() {
+      const tbody = document.getElementById('testsTableBody');
+      if (!allTests.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No tests added yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = allTests.map(t => `
+        <tr>
+          <td><strong>${t.exam_name}</strong></td>
+          <td>${t.subject}</td>
+          <td>${t.title}</td>
+          <td>${(t.questions || []).length} Qs • ${t.total_marks} Marks (${t.duration_minutes}m)</td>
+          <td>
+            <span class="pill ${t.status}">${t.status === 'live' ? '🟢 LIVE' : '⏳ COMING SOON'}</span>
+            ${t.scheduled_date ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">📅 ${t.scheduled_date}</div>` : ''}
+          </td>
+          <td><button class="del-btn" onclick="deleteTest('${t.id}')">Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteTest(id) {
+      if (!confirm('Delete this test permanently?')) return;
+      await sb.from('exam_tests').delete().eq('id', id);
+      await loadAllData();
+    }
+
+    async function publishNote() {
+      const [exam_slug, exam_name] = document.getElementById('nExam').value.split('|');
+      const subject = document.getElementById('nSubject').value.trim();
+      const title = document.getElementById('nTitle').value.trim();
+      const description = document.getElementById('nDesc').value.trim();
+      const file_url = document.getElementById('nUrl').value.trim();
+      const status = document.getElementById('nStatus').value;
+      const available_date = document.getElementById('nDate').value || null;
+      const is_free = document.getElementById('nAccess').value === 'free';
+      const price = parseFloat(document.getElementById('nPrice').value) || 0;
+      const msg = document.getElementById('noteSaveMsg');
+
+      if (!subject || !title) {
+        alert('Please enter Subject and Note Title.');
+        return;
+      }
+
+      msg.textContent = 'Saving note...';
+      const { error } = await sb.from('exam_notes').insert([{
+        exam_slug,
+        exam_name,
+        subject,
+        title,
+        description,
+        file_url,
+        status,
+        available_date,
+        is_free,
+        price
+      }]);
+
+      if (error) {
+        alert('Error: ' + error.message);
+        msg.textContent = '';
+        return;
+      }
+
+      msg.textContent = '✓ Note Saved Successfully!';
+      document.getElementById('nTitle').value = '';
+      document.getElementById('nDesc').value = '';
+      document.getElementById('nUrl').value = '';
+      await loadAllData();
+      setTimeout(() => { msg.textContent = ''; }, 3000);
+    }
+
+    function renderNotesTable() {
+      const tbody = document.getElementById('notesTableBody');
+      if (!allNotes.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No study notes added yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = allNotes.map(n => `
+        <tr>
+          <td><strong>${n.exam_name}</strong></td>
+          <td>${n.subject}</td>
+          <td>${n.title}</td>
+          <td>${n.is_free ? 'Free PDF' : '₹' + n.price}</td>
+          <td>
+            <span class="pill ${n.status}">${n.status === 'live' ? '🟢 LIVE' : '⏳ COMING SOON'}</span>
+            ${n.available_date ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">📅 ${n.available_date}</div>` : ''}
+          </td>
+          <td><button class="del-btn" onclick="deleteNote('${n.id}')">Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteNote(id) {
+      if (!confirm('Delete this note?')) return;
+      await sb.from('exam_notes').delete().eq('id', id);
+      await loadAllData();
+    }
+
+    verifyAdmin();
+  </script>
+</body>
+</html>

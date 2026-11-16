@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Notes & Study Material | Xtreme AG Apps</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --green: #059669;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 10% 0, rgba(5, 150, 105, 0.08), transparent 32%), var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(1180px, 92%);
+      margin: auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--green), #10b981);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .nav-links { display: flex; gap: 10px; align-items: center; }
+    .pill-link {
+      padding: 9px 15px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .wrap { width: min(1180px, 92%); margin: auto; padding: 40px 0 70px; }
+
+    .hero { margin-bottom: 28px; }
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    h1 { font-size: clamp(32px, 5vw, 52px); margin: 12px 0 8px; letter-spacing: -0.03em; }
+    h1 span { color: var(--green); }
+
+    .cat-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+    }
+
+    .cat-tab {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      font-weight: 700;
+      font-size: 13.5px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .cat-tab.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .note-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .n-top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 800; }
+    .badge.exam { background: #ecfdf5; color: var(--green); }
+    .badge.soon { background: #fef3c7; color: #b45309; }
+
+    .note-card h3 { margin: 0 0 6px; font-size: 19px; }
+    .note-card .subj { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 10px; }
+    .note-card p { margin: 0 0 18px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+    .n-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .n-btn.soon { background: #f1f5f9; color: #64748b; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <a class="brand" href="./">
+        <div class="brand-logo">📚</div>
+        <div>XTREME <b>NOTES PORTAL</b></div>
+      </a>
+      <div class="nav-links">
+        <a class="pill-link" href="./">Home</a>
+        <a class="pill-link" href="./test-portal.html">📝 Test Series</a>
+        <a class="pill-link" style="background:#f0fdf4;border-color:#bbf7d0;color:#15803d" href="https://wa.me/917878025556" target="_blank">💬 7878025556</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <span class="eyebrow">Exam-Oriented Study Material</span>
+      <h1>Subject-wise <span>PDF Notes.</span></h1>
+      <p style="color:var(--muted);max-width:660px">Select your exam category below to access crisp revision notes, high-yield PDFs and upcoming study material schedules.</p>
+    </section>
+
+    <div class="cat-tabs" id="noteCats"></div>
+    <div class="notes-grid" id="notesGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Loading study notes...</div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = window.supabase.createClient(
+      "https://vbfjafblxnrfminbdlbb.supabase.co",
+      "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9"
+    );
+
+    let allNotes = [];
+    let activeCat = 'all';
+
+    async function loadNotes() {
+      const { data } = await sb
+        .from('exam_notes')
+        .select('*')
+        .order('created_at', { ascending: false });
+      allNotes = data || [];
+      renderCats();
+      renderNotes();
+    }
+
+    function renderCats() {
+      const cats = [{ slug: 'all', name: 'All Exams' }];
+      allNotes.forEach(n => {
+        if (n.exam_slug && !cats.some(c => c.slug === n.exam_slug)) {
+          cats.push({ slug: n.exam_slug, name: n.exam_name });
+        }
+      });
+      document.getElementById('noteCats').innerHTML = cats.map(c => `
+        <button class="cat-tab ${activeCat === c.slug ? 'active' : ''}" onclick="filterCat('${c.slug}')">${c.name}</button>
+      `).join('');
+    }
+
+    function filterCat(slug) {
+      activeCat = slug;
+      renderCats();
+      renderNotes();
+    }
+
+    function renderNotes() {
+      const grid = document.getElementById('notesGrid');
+      const list = activeCat === 'all' ? allNotes : allNotes.filter(n => n.exam_slug === activeCat);
+
+      if (!list.length) {
+        grid.innerHTML = `<div style="grid-column:1/-1;background:#fff;padding:40px;border-radius:20px;text-align:center;border:1px solid var(--line)">
+          <h3>No notes uploaded in this category yet</h3>
+          <p style="color:var(--muted)">New PDF notes will be available soon.</p>
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(n => {
+        const isLive = n.status === 'live';
+        const actionHref = n.is_free
+          ? (n.file_url || '#')
+          : `https://wa.me/917878025556?text=${encodeURIComponent('Hello Sir, mujhe "' + n.title + '" (₹' + n.price + ') Note buy karna hai.')}`;
+
+        return `
+          <article class="note-card">
+            <div>
+              <div class="n-top">
+                <span class="badge exam">${n.exam_name}</span>
+                <span class="badge ${isLive ? 'exam' : 'soon'}">
+                  ${isLive ? (n.is_free ? 'FREE PDF' : '₹' + n.price) : '⏳ COMING SOON'}
+                </span>
+              </div>
+              <div class="subj">📌 Subject: ${n.subject}</div>
+              <h3>${n.title}</h3>
+              <p>${n.description || 'Exam-oriented revision material.'}</p>
+            </div>
+            ${isLive
+              ? `<a class="n-btn" href="${actionHref}" target="_blank" rel="noopener">${n.is_free ? '📄 Open / Download PDF →' : '🔓 Buy / Unlock on WhatsApp (₹' + n.price + ') →'}</a>`
+              : `<span class="n-btn soon">Available on ${n.available_date || 'Soon'}</span>`
+            }
+          </article>
+        `;
+      }).join('');
+    }
+
+    loadNotes();
+  </script>
+</body>
+</html>
