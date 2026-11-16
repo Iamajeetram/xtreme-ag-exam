@@ -2,1099 +2,431 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Admin Command Center | Xtreme AG Apps</title>
-  <meta name="robots" content="noindex,nofollow">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Sign In | Xtreme Exam Portal</title>
   <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #090d16;
-      --card: #111827;
-      --card2: #1e293b;
-      --line: rgba(255, 255, 255, 0.1);
-      --gold: #f59e0b;
-      --gold-light: #fbbf24;
-      --blue: #3b82f6;
-      --green: #10b981;
-      --red: #ef4444;
-      --text: #f8fafc;
-      --muted: #94a3b8;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --indigo: #4f46e5;
+      --wa: #16a34a;
+      --shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
-      background: radial-gradient(circle at 15% 0%, rgba(59, 130, 246, 0.12), transparent 35%), var(--bg);
-      color: var(--text);
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.11), transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(79, 70, 229, 0.09), transparent 35%),
+        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif;
     }
 
     a { color: inherit; text-decoration: none; }
-    button, input, select, textarea { font-family: inherit; }
 
-    /* Top Header */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(9, 13, 22, 0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      width: min(1220px, 94%);
-      margin: auto;
-      min-height: 72px;
+      width: min(1140px, 92%);
+      margin: 0 auto;
+      padding: 20px 0;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      position: relative;
+      z-index: 10;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      background: linear-gradient(135deg, var(--gold), #d97706);
-      color: #000;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      font-size: 18px;
-    }
-
-    .nav-right {
-      display: flex;
+    .brand {
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      position: relative;
-      z-index: 110;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.03em;
     }
 
-    .nav-btn {
-      padding: 9px 14px;
+    .brand-logo {
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .brand b { color: var(--blue); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      background: #fff;
       border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--text);
       font-size: 13px;
       font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .auth-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .card {
+      width: min(440px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 38px 30px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--blue), var(--indigo));
+      pointer-events: none;
+    }
+
+    .motif-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin: 10px 0 24px;
+    }
+
+    .perks {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+      text-align: left;
+      display: grid;
+      gap: 8px;
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .perk-item span {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .google-btn {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+      user-select: none;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      transition: all 0.2s ease;
+    }
+
+    .google-btn:hover, .google-btn:active {
+      border-color: var(--blue);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .google-btn:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .google-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    /* Already Logged In Box */
+    .session-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      text-align: center;
+    }
+
+    .session-box p {
+      margin: 0 0 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .session-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .continue-btn {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 800;
+      border: 0;
       cursor: pointer;
     }
 
     .logout-btn {
-      padding: 9px 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      background: rgba(239, 68, 68, 0.15);
-      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #fff;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
-      touch-action: manipulation;
     }
 
-    .logout-btn:hover, .logout-btn:active {
-      background: var(--red);
-      color: #fff;
+    .status {
+      min-height: 22px;
+      margin-top: 15px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--blue);
     }
 
-    main {
-      width: min(1220px, 94%);
-      margin: auto;
-      padding: 32px 0 70px;
+    .status.error { color: #dc2626; }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 22px 0 18px;
     }
 
-    /* Top Stats Banner */
-    .top-bar {
+    .help-row {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 26px;
-    }
-
-    .admin-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 13px;
-      border-radius: 999px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      color: #34d399;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 18px 20px;
-    }
-
-    .stat-card span {
       font-size: 12.5px;
       color: var(--muted);
-      font-weight: 600;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .stat-card strong {
-      display: block;
-      font-size: 28px;
-      margin-top: 6px;
-      color: var(--gold-light);
-    }
-
-    /* Main 3 Navigation Tabs */
-    .tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .tab-btn {
-      padding: 16px 18px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--blue), #2563eb);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-    }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* Cards & Forms */
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 26px;
-      margin-bottom: 24px;
-    }
-
-    .panel h2 {
-      margin: 0 0 6px;
-      font-size: 21px;
-    }
-
-    .panel p.sub {
-      margin: 0 0 20px;
-      color: var(--muted);
-      font-size: 13.5px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .full-col { grid-column: 1 / -1; }
-
-    label {
-      display: block;
-      font-size: 13px;
+    .wa-link {
+      color: var(--wa);
       font-weight: 700;
-      color: #cbd5e1;
-      margin-bottom: 7px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: #0b1120;
-      color: var(--text);
-      font-size: 14.5px;
-      outline: none;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--blue);
-    }
-
-    .primary-btn {
-      padding: 13px 22px;
-      border-radius: 12px;
-      border: 0;
-      background: linear-gradient(135deg, var(--gold), #d97706);
-      color: #000;
-      font-weight: 800;
-      font-size: 14.5px;
-      cursor: pointer;
-    }
-
-    .sec-btn {
-      padding: 11px 16px;
-      border-radius: 11px;
-      border: 1px solid var(--line);
-      background: var(--card2);
-      color: var(--text);
-      font-weight: 700;
-      font-size: 13.5px;
-      cursor: pointer;
-    }
-
-    .del-btn {
-      padding: 7px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      background: rgba(239, 68, 68, 0.15);
-      color: #fca5a5;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* Tables */
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 640px;
-    }
-
-    th, td {
-      padding: 14px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-      font-size: 14px;
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .student-row {
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .student-row:hover {
-      background: rgba(59, 130, 246, 0.1);
-    }
-
-    .clickable-name {
-      color: #60a5fa;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11.5px;
-      font-weight: 800;
-    }
-
-    .pill.live { background: rgba(16, 185, 129, 0.16); color: #34d399; }
-    .pill.upcoming { background: rgba(245, 158, 11, 0.16); color: #fbbf24; }
-
-    /* Question Builder Box */
-    .q-box {
-      background: #0b1120;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 18px;
-      margin-top: 14px;
-    }
-
-    .q-item {
-      padding: 12px;
-      border-radius: 10px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    /* Student Score Modal */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      z-index: 200;
-    }
-
-    .modal-backdrop.open { display: flex; }
-
-    .modal {
-      width: min(680px, 100%);
-      max-height: 86vh;
-      overflow-y: auto;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 26px;
-    }
-
-    .modal-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 14px;
-      margin-bottom: 18px;
-    }
-
-    .DeniedBox {
-      display: none;
-      max-width: 520px;
-      margin: 80px auto;
-      padding: 36px;
-      text-align: center;
-      background: var(--card);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      border-radius: 22px;
-    }
-
-    @media (max-width: 780px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .tabs { grid-template-columns: 1fr; }
-      .form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="nav">
-      <a class="logo" href="./">
-        <div class="mark">X</div>
-        <div>Xtreme <span style="color:var(--gold-light)">Admin</span></div>
-      </a>
-      <div class="nav-right">
-        <a class="nav-btn" href="./test-portal.html">View Test Portal</a>
-        <a class="nav-btn" href="./notes.html">View Notes</a>
-        <button type="button" class="logout-btn" id="logoutBtn" onclick="forceSignOut()">Sign Out ⏻</button>
-      </div>
-    </div>
+    <a class="brand" href="./">
+      <div class="brand-logo">X</div>
+      <div>XTREME <b>AG APPS</b></div>
+    </a>
+    <a class="back-btn" href="./">← Back to Home</a>
   </header>
 
-  <main>
-    <!-- Main Admin Dashboard -->
-    <section id="adminContent" style="display:none">
-      <div class="top-bar">
-        <div>
-          <div class="admin-badge">✓ Verified Administrator: <span id="adminEmailText"></span></div>
-          <h1 style="margin:10px 0 0;font-size:28px">Xtreme Exam Control Panel</h1>
-        </div>
-        <button class="sec-btn" onclick="loadAllData()">↻ Refresh Data</button>
+  <div class="auth-wrap">
+    <main class="card">
+      <div class="motif-badge">✦ ॐ ✦ STUDENT PORTAL</div>
+      <h1>Welcome to Xtreme Exam</h1>
+      <div class="sub">
+        Sign in with your Google account to access Test Series, Attempt History & Study Material.
       </div>
 
-      <!-- Summary Counters -->
-      <div class="stats-row">
-        <div class="stat-card"><span>Registered Students</span><strong id="countStudents">0</strong></div>
-        <div class="stat-card"><span>Total Test Attempts</span><strong id="countAttempts">0</strong></div>
-        <div class="stat-card"><span>Published / Upcoming Tests</span><strong id="countTests">0</strong></div>
-        <div class="stat-card"><span>Study Notes / PDFs</span><strong id="countNotes">0</strong></div>
+      <div class="perks">
+        <div class="perk-item"><span>✓</span> Instant access to Raj GK, RAS & 2nd Grade Tests</div>
+        <div class="perk-item"><span>✓</span> Automatic score saving & rank analysis</div>
+        <div class="perk-item"><span>✓</span> One-click secure Google authentication</div>
       </div>
 
-      <!-- 3 Main Tabs -->
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('usersTab', this)">👥 1. Students & Scores</button>
-        <button class="tab-btn" onclick="switchTab('testsTab', this)">📋 2. Upload & Manage Tests</button>
-        <button class="tab-btn" onclick="switchTab('notesTab', this)">📚 3. Upload & Manage Notes</button>
-      </div>
+      <button id="googleBtn" class="google-btn" type="button" onclick="startGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+          <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+          <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+          <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.9 7.4 24 12 24z"/>
+        </svg>
+        <span id="btnText">Continue with Google</span>
+      </button>
 
-      <!-- ================= TAB 1: USERS & SCORES ================= -->
-      <div id="usersTab" class="tab-panel active">
-        <div class="panel">
-          <h2>Registered Students Directory</h2>
-          <p class="sub">Kisi bhi student ke <strong>Name</strong> par tap karke uske saare attempted tests aur scores dekhein.</p>
-          <div style="margin-bottom:16px">
-            <input id="studentSearch" placeholder="🔍 Search student by Name, Mobile or Email..." oninput="renderUsersTable()">
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Student Name (Tap for Scores)</th>
-                  <th>Mobile Number</th>
-                  <th>Email ID</th>
-                  <th>Tests Given</th>
-                  <th>Joined Date</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody">
-                <tr><td colspan="6" style="text-align:center;color:var(--muted)">Loading students...</td></tr>
-              </tbody>
-            </table>
-          </div>
+      <!-- Session Box if already signed in -->
+      <div id="sessionBox" class="session-box">
+        <p id="sessionUserText">Signed in</p>
+        <div class="session-actions">
+          <button id="continuePortalBtn" class="continue-btn" type="button">Go to Portal →</button>
+          <button id="signOutBtn" class="logout-btn" type="button">Sign Out</button>
         </div>
       </div>
 
-      <!-- ================= TAB 2: UPLOAD & MANAGE TESTS ================= -->
-      <div id="testsTab" class="tab-panel">
-        <div class="panel">
-          <h2>Create New Test / Upcoming Test Schedule</h2>
-          <p class="sub">Yahan se Exam wise aur Subject wise Live Test ya "Coming Soon" test publish karein.</p>
+      <div id="status" class="status"></div>
 
-          <div class="form-grid">
-            <div>
-              <label>Select Exam Category</label>
-              <select id="tExam">
-                <option value="raj-gk|Raj GK">Raj GK (Rajasthan GK)</option>
-                <option value="ras-prelims|RAS Prelims">RPSC RAS Prelims</option>
-                <option value="rpsc-2nd-grade|RPSC 2nd Grade">RPSC 2nd Grade</option>
-                <option value="rpsc-si|RPSC Sub-Inspector">RPSC Sub-Inspector (SI)</option>
-                <option value="reet-mains|REET / 3rd Grade">REET / 3rd Grade</option>
-              </select>
-            </div>
+      <div class="divider"></div>
 
-            <div>
-              <label>Subject / Topic Name</label>
-              <input id="tSubject" placeholder="e.g. Rajasthan History, Geography, Full Mock">
-            </div>
-
-            <div class="full-col">
-              <label>Test Title</label>
-              <input id="tTitle" placeholder="e.g. Raj GK Mock Test #01 - Mewar History">
-            </div>
-
-            <div>
-              <label>Test Status (Live or Coming Soon)</label>
-              <select id="tStatus" onchange="toggleTestScheduleDate()">
-                <option value="live">🟢 Live Now (Students can attempt)</option>
-                <option value="upcoming">⏳ Coming Soon (Show release date)</option>
-              </select>
-            </div>
-
-            <div id="tDateWrap">
-              <label>Test Date / Coming Soon Release Date</label>
-              <input type="date" id="tDate">
-            </div>
-
-            <div>
-              <label>Duration (Minutes)</label>
-              <input type="number" id="tDuration" value="60">
-            </div>
-
-            <div>
-              <label>Total Marks</label>
-              <input type="number" id="tMarks" value="100">
-            </div>
-          </div>
-
-          <!-- Question Builder -->
-          <div class="q-box">
-            <h3 style="margin:0 0 10px;font-size:16px">Add Questions to this Test (<span id="qCountBadge">0</span> added)</h3>
-            <div class="form-grid">
-              <div class="full-col">
-                <label>Question Text (Hindi / English)</label>
-                <textarea id="qText" rows="2" placeholder="Write the question here..."></textarea>
-              </div>
-              <div><label>Option A</label><input id="qOptA" placeholder="Option A"></div>
-              <div><label>Option B</label><input id="qOptB" placeholder="Option B"></div>
-              <div><label>Option C</label><input id="qOptC" placeholder="Option C"></div>
-              <div><label>Option D</label><input id="qOptD" placeholder="Option D"></div>
-              <div>
-                <label>Correct Answer</label>
-                <select id="qAns">
-                  <option value="0">Option A</option>
-                  <option value="1">Option B</option>
-                  <option value="2">Option C</option>
-                  <option value="3">Option D</option>
-                </select>
-              </div>
-              <div>
-                <label>Explanation / Solution (Optional)</label>
-                <input id="qExp" placeholder="Short explanation">
-              </div>
-            </div>
-            <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-              <button type="button" class="sec-btn" onclick="addQuestionToDraft()">+ Add Question to List</button>
-              <button type="button" class="sec-btn" onclick="clearDraftQuestions()">Clear All Questions</button>
-            </div>
-
-            <div id="draftQuestionsList" style="margin-top:14px"></div>
-          </div>
-
-          <div style="margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-            <button type="button" class="primary-btn" onclick="publishTest()">🚀 Save & Publish Test</button>
-            <span id="testSaveMsg" style="font-size:14px;font-weight:700;color:#34d399"></span>
-          </div>
-        </div>
-
-        <!-- Existing Tests List -->
-        <div class="panel">
-          <h2>All Published & Upcoming Tests</h2>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Exam</th>
-                  <th>Subject</th>
-                  <th>Test Title</th>
-                  <th>Questions</th>
-                  <th>Status / Date</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="testsTableBody"></tbody>
-            </table>
-          </div>
-        </div>
+      <div class="help-row">
+        <span>🔒 100% Secure Sign-In</span>
+        <a class="wa-link" href="https://wa.me/917878025556?text=Hello%20Sir%2C%20mujhe%20Xtreme%20Exam%20Portal%20login%20mein%20help%20chahiye." target="_blank" rel="noopener">
+          💬 Need Help? 7878025556
+        </a>
       </div>
-
-      <!-- ================= TAB 3: UPLOAD & MANAGE NOTES ================= -->
-      <div id="notesTab" class="tab-panel">
-        <div class="panel">
-          <h2>Publish Study Material / PDF Notes</h2>
-          <p class="sub">Exam aur Subject ke hisaab se PDF Notes ya Coming Soon Notes add karein.</p>
-
-          <div class="form-grid">
-            <div>
-              <label>Select Exam Category</label>
-              <select id="nExam">
-                <option value="raj-gk|Raj GK">Raj GK (Rajasthan GK)</option>
-                <option value="ras-prelims|RAS Prelims">RPSC RAS Prelims</option>
-                <option value="rpsc-2nd-grade|RPSC 2nd Grade">RPSC 2nd Grade</option>
-                <option value="rpsc-si|RPSC Sub-Inspector">RPSC Sub-Inspector (SI)</option>
-                <option value="reet-mains|REET / 3rd Grade">REET / 3rd Grade</option>
-              </select>
-            </div>
-
-            <div>
-              <label>Subject Name</label>
-              <input id="nSubject" placeholder="e.g. Art & Culture, Polity, Current Affairs">
-            </div>
-
-            <div class="full-col">
-              <label>Note / PDF Title</label>
-              <input id="nTitle" placeholder="e.g. Complete Rajasthan Art & Culture Crisp Notes PDF">
-            </div>
-
-            <div class="full-col">
-              <label>Short Description / Highlights</label>
-              <input id="nDesc" placeholder="e.g. 45 Pages handwritten & exam-oriented revision PDF">
-            </div>
-
-            <div class="full-col">
-              <label>Google Drive / PDF Link (Leave empty if Coming Soon)</label>
-              <input id="nUrl" placeholder="https://drive.google.com/file/d/...">
-            </div>
-
-            <div>
-              <label>Status</label>
-              <select id="nStatus">
-                <option value="live">🟢 Available Now</option>
-                <option value="upcoming">⏳ Coming Soon</option>
-              </select>
-            </div>
-
-            <div>
-              <label>Release / Available Date</label>
-              <input type="date" id="nDate">
-            </div>
-
-            <div>
-              <label>Access Type</label>
-              <select id="nAccess">
-                <option value="free">Free PDF</option>
-                <option value="paid">Premium / Paid Note</option>
-              </select>
-            </div>
-
-            <div>
-              <label>Price in ₹ (0 for Free)</label>
-              <input type="number" id="nPrice" value="0">
-            </div>
-          </div>
-
-          <div style="margin-top:20px;display:flex;align-items:center;gap:14px">
-            <button type="button" class="primary-btn" onclick="publishNote()">📚 Save & Publish Note</button>
-            <span id="noteSaveMsg" style="font-size:14px;font-weight:700;color:#34d399"></span>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>All Study Notes</h2>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Exam</th>
-                  <th>Subject</th>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Status / Date</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="notesTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Access Denied Screen -->
-    <section id="deniedBox" class="DeniedBox">
-      <h1 style="color:var(--red);margin-top:0">Access Denied</h1>
-      <p style="color:var(--muted)">This panel is restricted to <strong>ajeetram3@gmail.com</strong>.</p>
-      <div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
-        <a class="sec-btn" href="./auth.html">Go to Sign In</a>
-        <button class="logout-btn" onclick="forceSignOut()">Sign Out</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- STUDENT SCORE MODAL -->
-  <div id="scoreModal" class="modal-backdrop" onclick="if(event.target===this)closeScoreModal()">
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <h3 id="modalStudentName" style="margin:0;font-size:20px">Student Name</h3>
-          <div id="modalStudentMeta" style="color:var(--muted);font-size:13px;margin-top:4px"></div>
-        </div>
-        <button class="sec-btn" onclick="closeScoreModal()">✕ Close</button>
-      </div>
-      <div id="modalScoresBody"></div>
-    </div>
+    </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://vbfjafblxnrfminbdlbb.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9';
+    const SUPABASE_URL = "https://vbfjafblxnrfminbdlbb.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    const ADMIN_EMAIL = 'ajeetram3@gmail.com';
 
-    let allUsers = [];
-    let allAttempts = [];
-    let allTests = [];
-    let allNotes = [];
-    let draftQuestions = [];
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("googleBtn");
+    const btnText = document.getElementById("btnText");
+    const sessionBox = document.getElementById("sessionBox");
+    const sessionUserText = document.getElementById("sessionUserText");
+    const continuePortalBtn = document.getElementById("continuePortalBtn");
+    const signOutBtn = document.getElementById("signOutBtn");
 
-    // 100% Working Sign Out Function
-    async function forceSignOut() {
-      const btn = document.getElementById('logoutBtn');
-      if (btn) btn.textContent = 'Signing out...';
+    async function startGoogle() {
       try {
-        await sb.auth.signOut({ scope: 'local' });
-      } catch (e) {
-        console.warn(e);
+        btn.disabled = true;
+        btnText.textContent = "Opening Google...";
+        statusEl.className = "status";
+        statusEl.textContent = "Redirecting to Google Sign-In...";
+
+        const { error } = await sb.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/auth.html"
+          }
+        });
+
+        if (error) throw error;
+      } catch (err) {
+        btn.disabled = false;
+        btnText.textContent = "Continue with Google";
+        statusEl.className = "status error";
+        statusEl.textContent = err.message || "Could not open Google login.";
       }
-      try {
-        localStorage.clear();
-        sessionStorage.clear();
-      } catch (e) {}
-      window.location.replace('./auth.html');
     }
 
-    function switchTab(tabId, btnEl) {
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      btnEl.classList.add('active');
-    }
-
-    async function verifyAdmin() {
+    async function checkExistingSession() {
       try {
         const { data: { session } } = await sb.auth.getSession();
-        if (!session?.user) {
-          window.location.replace('./auth.html');
-          return;
-        }
-        const email = (session.user.email || '').toLowerCase().trim();
-        const { data: profile } = await sb
-          .from('profiles')
-          .select('display_name,mobile,is_admin')
-          .eq('id', session.user.id)
+        if (!session) return;
+
+        statusEl.textContent = "Checking your profile...";
+        const email = (session.user.email || "").toLowerCase().trim();
+
+        const { data: p, error: pErr } = await sb
+          .from("profiles")
+          .select("display_name,mobile,is_admin")
+          .eq("id", session.user.id)
           .maybeSingle();
 
-        if (email !== ADMIN_EMAIL || !profile || profile.is_admin !== true) {
-          document.getElementById('deniedBox').style.display = 'block';
-          return;
+        let targetUrl = "./complete-profile.html";
+        if (email === "ajeetram3@gmail.com" && p?.is_admin === true) {
+          targetUrl = "./admin.html";
+        } else if (p?.display_name && p?.mobile) {
+          targetUrl = "./test-portal.html";
         }
 
-        document.getElementById('adminEmailText').textContent = email;
-        document.getElementById('adminContent').style.display = 'block';
-        await loadAllData();
-      } catch (err) {
-        console.error(err);
-        document.getElementById('deniedBox').style.display = 'block';
+        // Show manual fallback buttons in case redirect is blocked
+        sessionBox.style.display = "block";
+        sessionUserText.textContent = "Logged in as: " + (p?.display_name || email);
+        continuePortalBtn.onclick = () => { window.location.href = targetUrl; };
+        signOutBtn.onclick = async () => {
+          await sb.auth.signOut({ scope: "local" });
+          window.location.reload();
+        };
+
+        // Auto redirect
+        window.location.href = targetUrl;
+      } catch (e) {
+        console.error(e);
+        btn.disabled = false;
+        statusEl.textContent = "";
       }
     }
 
-    async function loadAllData() {
-      // 1. Load Profiles
-      const { data: users } = await sb
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-      allUsers = users || [];
-
-      // 2. Load Attempts
-      const { data: attempts } = await sb
-        .from('exam_attempts')
-        .select('*')
-        .order('created_at', { ascending: false });
-      allAttempts = attempts || [];
-
-      // 3. Load Tests
-      const { data: tests } = await sb
-        .from('exam_tests')
-        .select('*')
-        .order('created_at', { ascending: false });
-      allTests = tests || [];
-
-      // 4. Load Notes
-      const { data: notes } = await sb
-        .from('exam_notes')
-        .select('*')
-        .order('created_at', { ascending: false });
-      allNotes = notes || [];
-
-      // Update counters
-      document.getElementById('countStudents').textContent = allUsers.length;
-      document.getElementById('countAttempts').textContent = allAttempts.length;
-      document.getElementById('countTests').textContent = allTests.length;
-      document.getElementById('countNotes').textContent = allNotes.length;
-
-      renderUsersTable();
-      renderTestsTable();
-      renderNotesTable();
-    }
-
-    function renderUsersTable() {
-      const q = (document.getElementById('studentSearch').value || '').toLowerCase().trim();
-      const tbody = document.getElementById('usersTableBody');
-
-      const filtered = allUsers.filter(u => {
-        const name = (u.display_name || '').toLowerCase();
-        const mob = (u.mobile || '').toLowerCase();
-        const em = (u.email || '').toLowerCase();
-        return !q || name.includes(q) || mob.includes(q) || em.includes(q);
-      });
-
-      if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No registered students found.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = filtered.map((u, idx) => {
-        const userAttempts = allAttempts.filter(a => a.user_id === u.id);
-        const dt = u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN') : '-';
-        return `
-          <tr class="student-row" onclick="openStudentScores('${u.id}')">
-            <td>${idx + 1}</td>
-            <td><span class="clickable-name">👤 ${u.display_name || 'Incomplete Profile'} ↗</span></td>
-            <td>${u.mobile ? '<a href="https://wa.me/91'+u.mobile+'" target="_blank" onclick="event.stopPropagation()" style="color:#34d399;font-weight:700">📱 '+u.mobile+'</a>' : '-'}</td>
-            <td>${u.email || '-'}</td>
-            <td><span class="pill live">${userAttempts.length} Tests</span></td>
-            <td>${dt}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function openStudentScores(userId) {
-      const user = allUsers.find(u => u.id === userId);
-      if (!user) return;
-
-      const userAttempts = allAttempts.filter(a => a.user_id === userId);
-      document.getElementById('modalStudentName').textContent = user.display_name || 'Student';
-      document.getElementById('modalStudentMeta').textContent =
-        `Mobile: ${user.mobile || 'N/A'}  •  Email: ${user.email || 'N/A'}  •  Total Attempts: ${userAttempts.length}`;
-
-      const body = document.getElementById('modalScoresBody');
-      if (!userAttempts.length) {
-        body.innerHTML = `<div style="padding:28px;text-align:center;color:var(--muted)">Is student ne abhi tak koi test attempt nahi kiya hai.</div>`;
-      } else {
-        body.innerHTML = `
-          <div class="table-wrap">
-            <table style="min-width:100%">
-              <thead>
-                <tr>
-                  <th>Test Name</th>
-                  <th>Exam / Subject</th>
-                  <th>Score</th>
-                  <th>Correct / Wrong</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${userAttempts.map(a => `
-                  <tr>
-                    <td><strong>${a.test_title || 'Practice Test'}</strong></td>
-                    <td>${a.exam_name || ''} • ${a.subject || ''}</td>
-                    <td><span class="pill live">${a.score} / ${a.total_marks}</span></td>
-                    <td>✅ ${a.correct_count}  ❌ ${a.wrong_count}</td>
-                    <td>${new Date(a.created_at).toLocaleString('en-IN')}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
-      }
-      document.getElementById('scoreModal').classList.add('open');
-    }
-
-    function closeScoreModal() {
-      document.getElementById('scoreModal').classList.remove('open');
-    }
-
-    // Question Builder Functions
-    function addQuestionToDraft() {
-      const q = document.getElementById('qText').value.trim();
-      const a = document.getElementById('qOptA').value.trim();
-      const b = document.getElementById('qOptB').value.trim();
-      const c = document.getElementById('qOptC').value.trim();
-      const d = document.getElementById('qOptD').value.trim();
-      const ans = parseInt(document.getElementById('qAns').value, 10);
-      const exp = document.getElementById('qExp').value.trim();
-
-      if (!q || !a || !b || !c || !d) {
-        alert('Please fill Question and all 4 Options (A, B, C, D).');
-        return;
-      }
-
-      draftQuestions.push({ question: q, options: [a, b, c, d], answer: ans, explanation: exp });
-      document.getElementById('qText').value = '';
-      document.getElementById('qOptA').value = '';
-      document.getElementById('qOptB').value = '';
-      document.getElementById('qOptC').value = '';
-      document.getElementById('qOptD').value = '';
-      document.getElementById('qExp').value = '';
-      renderDraftQuestions();
-    }
-
-    function clearDraftQuestions() {
-      draftQuestions = [];
-      renderDraftQuestions();
-    }
-
-    function removeDraftQuestion(i) {
-      draftQuestions.splice(i, 1);
-      renderDraftQuestions();
-    }
-
-    function renderDraftQuestions() {
-      document.getElementById('qCountBadge').textContent = draftQuestions.length;
-      const box = document.getElementById('draftQuestionsList');
-      box.innerHTML = draftQuestions.map((item, idx) => `
-        <div class="q-item">
-          <div>
-            <strong>Q${idx + 1}: ${item.question}</strong>
-            <div style="font-size:12.5px;color:var(--muted);margin-top:4px">
-              A) ${item.options[0]} | B) ${item.options[1]} | C) ${item.options[2]} | D) ${item.options[3]}
-              • <span style="color:#34d399">Ans: Option ${['A','B','C','D'][item.answer]}</span>
-            </div>
-          </div>
-          <button type="button" class="del-btn" onclick="removeDraftQuestion(${idx})">Remove</button>
-        </div>
-      `).join('');
-    }
-
-    async function publishTest() {
-      const [exam_slug, exam_name] = document.getElementById('tExam').value.split('|');
-      const subject = document.getElementById('tSubject').value.trim();
-      const title = document.getElementById('tTitle').value.trim();
-      const status = document.getElementById('tStatus').value;
-      const scheduled_date = document.getElementById('tDate').value || null;
-      const duration_minutes = parseInt(document.getElementById('tDuration').value, 10) || 60;
-      const total_marks = parseFloat(document.getElementById('tMarks').value) || 100;
-      const msg = document.getElementById('testSaveMsg');
-
-      if (!subject || !title) {
-        alert('Please enter Subject and Test Title.');
-        return;
-      }
-
-      if (status === 'live' && draftQuestions.length === 0) {
-        alert('Live test ke liye kam se kam 1 question add karein, ya status ko "Coming Soon" rakhein.');
-        return;
-      }
-
-      msg.textContent = 'Publishing test...';
-      const { error } = await sb.from('exam_tests').insert([{
-        exam_slug,
-        exam_name,
-        subject,
-        title,
-        status,
-        scheduled_date,
-        duration_minutes,
-        total_marks,
-        questions: draftQuestions
-      }]);
-
-      if (error) {
-        alert('Error: ' + error.message);
-        msg.textContent = '';
-        return;
-      }
-
-      msg.textContent = '✓ Test Published Successfully!';
-      document.getElementById('tTitle').value = '';
-      clearDraftQuestions();
-      await loadAllData();
-      setTimeout(() => { msg.textContent = ''; }, 3000);
-    }
-
-    function renderTestsTable() {
-      const tbody = document.getElementById('testsTableBody');
-      if (!allTests.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No tests added yet.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = allTests.map(t => `
-        <tr>
-          <td><strong>${t.exam_name}</strong></td>
-          <td>${t.subject}</td>
-          <td>${t.title}</td>
-          <td>${(t.questions || []).length} Qs (${t.total_marks} Marks)</td>
-          <td>
-            <span class="pill ${t.status}">${t.status === 'live' ? '🟢 LIVE' : '⏳ COMING SOON'}</span>
-            ${t.scheduled_date ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">📅 ${t.scheduled_date}</div>` : ''}
-          </td>
-          <td><button class="del-btn" onclick="deleteTest('${t.id}')">Delete</button></td>
-        </tr>
-      `).join('');
-    }
-
-    async function deleteTest(id) {
-      if (!confirm('Delete this test permanently?')) return;
-      await sb.from('exam_tests').delete().eq('id', id);
-      await loadAllData();
-    }
-
-    async function publishNote() {
-      const [exam_slug, exam_name] = document.getElementById('nExam').value.split('|');
-      const subject = document.getElementById('nSubject').value.trim();
-      const title = document.getElementById('nTitle').value.trim();
-      const description = document.getElementById('nDesc').value.trim();
-      const file_url = document.getElementById('nUrl').value.trim();
-      const status = document.getElementById('nStatus').value;
-      const available_date = document.getElementById('nDate').value || null;
-      const is_free = document.getElementById('nAccess').value === 'free';
-      const price = parseFloat(document.getElementById('nPrice').value) || 0;
-      const msg = document.getElementById('noteSaveMsg');
-
-      if (!subject || !title) {
-        alert('Please enter Subject and Note Title.');
-        return;
-      }
-
-      msg.textContent = 'Saving note...';
-      const { error } = await sb.from('exam_notes').insert([{
-        exam_slug,
-        exam_name,
-        subject,
-        title,
-        description,
-        file_url,
-        status,
-        available_date,
-        is_free,
-        price
-      }]);
-
-      if (error) {
-        alert('Error: ' + error.message);
-        msg.textContent = '';
-        return;
-      }
-
-      msg.textContent = '✓ Note Saved Successfully!';
-      document.getElementById('nTitle').value = '';
-      document.getElementById('nDesc').value = '';
-      document.getElementById('nUrl').value = '';
-      await loadAllData();
-      setTimeout(() => { msg.textContent = ''; }, 3000);
-    }
-
-    function renderNotesTable() {
-      const tbody = document.getElementById('notesTableBody');
-      if (!allNotes.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No study notes added yet.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = allNotes.map(n => `
-        <tr>
-          <td><strong>${n.exam_name}</strong></td>
-          <td>${n.subject}</td>
-          <td>${n.title}</td>
-          <td>${n.is_free ? 'Free PDF' : '₹' + n.price}</td>
-          <td>
-            <span class="pill ${n.status}">${n.status === 'live' ? '🟢 LIVE' : '⏳ COMING SOON'}</span>
-            ${n.available_date ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">📅 ${n.available_date}</div>` : ''}
-          </td>
-          <td><button class="del-btn" onclick="deleteNote('${n.id}')">Delete</button></td>
-        </tr>
-      `).join('');
-    }
-
-    async function deleteNote(id) {
-      if (!confirm('Delete this note?')) return;
-      await sb.from('exam_notes').delete().eq('id', id);
-      await loadAllData();
-    }
-
-    verifyAdmin();
+    checkExistingSession();
   </script>
 </body>
 </html>
