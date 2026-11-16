@@ -21,13 +21,12 @@
       --indigo: #4f46e5;
       --wa: #16a34a;
       --wa-dark: #15803d;
-      --gold: #d97706;
       --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
       --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
       --shadow-hover: 0 25px 60px rgba(37, 99, 235, 0.14);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -44,12 +43,11 @@
 
     a { color: inherit; text-decoration: none; }
 
-    /* Header / Navbar */
     header {
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: rgba(255, 255, 255, 0.88);
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--line);
@@ -62,16 +60,16 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 11px;
+      gap: 10px;
       font-weight: 800;
       letter-spacing: -0.03em;
-      font-size: 19px;
+      font-size: 18px;
     }
 
     .brand-logo {
@@ -93,46 +91,42 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      position: relative;
+      z-index: 110;
     }
 
     .wa-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
+      gap: 7px;
+      padding: 10px 15px;
       border-radius: 999px;
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
       color: var(--wa-dark);
       font-size: 13.5px;
       font-weight: 700;
-      transition: all 0.2s ease;
-    }
-
-    .wa-btn:hover {
-      background: var(--wa);
-      color: #fff;
-      border-color: var(--wa);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.22);
+      cursor: pointer;
+      touch-action: manipulation;
     }
 
     .login-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       padding: 10px 18px;
       border-radius: 999px;
-      background: var(--text);
+      background: var(--blue);
       color: #fff;
       font-size: 13.5px;
-      font-weight: 700;
-      transition: all 0.2s ease;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
     }
 
-    .login-btn:hover {
-      background: var(--blue);
-      transform: translateY(-1px);
+    .login-btn:hover, .login-btn:active {
+      background: var(--blue-dark);
     }
 
     .wrap {
@@ -141,9 +135,8 @@
       flex: 1;
     }
 
-    /* Hero Section */
     .hero {
-      padding: 56px 0 36px;
+      padding: 52px 0 34px;
       text-align: center;
       max-width: 840px;
       margin: auto;
@@ -188,9 +181,9 @@
 
     .lead {
       color: var(--muted);
-      font-size: clamp(16px, 2.2vw, 19px);
+      font-size: clamp(15.5px, 2.2vw, 18.5px);
       line-height: 1.65;
-      margin: 0 auto 28px;
+      margin: 0 auto 26px;
       max-width: 680px;
     }
 
@@ -198,8 +191,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 10px;
+      gap: 10px;
     }
 
     .chip {
@@ -216,7 +208,6 @@
       box-shadow: var(--shadow-sm);
     }
 
-    /* Main Portal Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -231,11 +222,12 @@
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 28px;
-      padding: 34px;
+      padding: 32px;
       box-shadow: var(--shadow);
-      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .tile::before {
@@ -246,34 +238,29 @@
       right: 0;
       height: 5px;
       background: linear-gradient(90deg, var(--blue), var(--indigo));
+      pointer-events: none;
     }
 
     .tile.notes-card::before {
       background: linear-gradient(90deg, #059669, #10b981);
     }
 
-    .tile:hover {
-      transform: translateY(-6px);
-      border-color: #93c5fd;
-      box-shadow: var(--shadow-hover);
-    }
-
     .tile-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .icon {
-      width: 58px;
-      height: 58px;
+      width: 56px;
+      height: 56px;
       border-radius: 18px;
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, #eff6ff, #dbeafe);
       color: var(--blue);
-      font-size: 28px;
+      font-size: 27px;
     }
 
     .notes-card .icon {
@@ -289,7 +276,6 @@
       color: var(--blue);
       font-size: 11.5px;
       font-weight: 800;
-      letter-spacing: 0.04em;
     }
 
     .notes-card .tag {
@@ -299,21 +285,20 @@
 
     .tile h2 {
       margin: 0 0 10px;
-      font-size: 26px;
-      letter-spacing: -0.02em;
+      font-size: 25px;
     }
 
     .tile p {
       margin: 0 0 20px;
       color: var(--muted);
       line-height: 1.65;
-      font-size: 15.5px;
+      font-size: 15px;
     }
 
     .feature-list {
       list-style: none;
       padding: 0;
-      margin: 0 0 28px;
+      margin: 0 0 26px;
       display: grid;
       gap: 9px;
     }
@@ -327,14 +312,8 @@
       color: #334155;
     }
 
-    .feature-list li span {
-      color: var(--blue);
-      font-weight: 800;
-    }
-
-    .notes-card .feature-list li span {
-      color: #059669;
-    }
+    .feature-list li span { color: var(--blue); font-weight: 800; }
+    .notes-card .feature-list li span { color: #059669; }
 
     .card-cta {
       display: inline-flex;
@@ -343,26 +322,16 @@
       width: 100%;
       padding: 15px 20px;
       border-radius: 16px;
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      font-weight: 800;
-      font-size: 15px;
-      color: var(--text);
-      transition: all 0.2s ease;
-    }
-
-    .tile:hover .card-cta {
       background: var(--blue);
       color: #fff;
-      border-color: var(--blue);
+      font-weight: 800;
+      font-size: 15px;
     }
 
-    .tile.notes-card:hover .card-cta {
+    .notes-card .card-cta {
       background: #059669;
-      border-color: #059669;
     }
 
-    /* Support Banner */
     .support-banner {
       margin: 10px 0 65px;
       padding: 28px 32px;
@@ -377,16 +346,8 @@
       box-shadow: var(--shadow);
     }
 
-    .support-info h3 {
-      margin: 0 0 6px;
-      font-size: 21px;
-    }
-
-    .support-info p {
-      margin: 0;
-      color: #cbd5e1;
-      font-size: 14.5px;
-    }
+    .support-info h3 { margin: 0 0 6px; font-size: 21px; }
+    .support-info p { margin: 0; color: #cbd5e1; font-size: 14.5px; }
 
     .wa-cta-large {
       display: inline-flex;
@@ -398,16 +359,8 @@
       color: #052e16;
       font-weight: 800;
       font-size: 15px;
-      transition: all 0.2s ease;
-      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
     }
 
-    .wa-cta-large:hover {
-      background: #4ade80;
-      transform: translateY(-2px);
-    }
-
-    /* Footer */
     footer {
       border-top: 1px solid var(--line);
       padding: 28px 0;
@@ -433,19 +386,14 @@
       font-weight: 600;
     }
 
-    .footer-links a:hover {
-      color: var(--blue);
-    }
-
-    /* Floating WhatsApp Button */
     .wa-float {
       position: fixed;
-      right: 22px;
-      bottom: 22px;
+      right: 20px;
+      bottom: 20px;
       z-index: 90;
       display: inline-flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       padding: 13px 18px;
       border-radius: 999px;
       background: #16a34a;
@@ -453,27 +401,19 @@
       font-weight: 800;
       font-size: 14px;
       box-shadow: 0 12px 30px rgba(22, 163, 74, 0.38);
-      transition: transform 0.2s ease;
-    }
-
-    .wa-float:hover {
-      transform: scale(1.05);
     }
 
     @media (max-width: 780px) {
       .grid { grid-template-columns: 1fr; gap: 20px; }
-      .hero { padding: 40px 0 24px; }
-      .tile { padding: 26px; }
-      .support-banner { padding: 24px; text-align: left; }
+      .hero { padding: 38px 0 22px; }
+      .tile { padding: 24px; }
+      .support-banner { padding: 22px; }
       .wa-btn span.hide-sm { display: none; }
-      .wa-float span { display: none; }
-      .wa-float { padding: 14px; border-radius: 50%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <div class="nav">
       <a class="brand" href="./">
@@ -485,14 +425,12 @@
           <span>💬</span>
           <span>WhatsApp <span class="hide-sm">Support</span></span>
         </a>
-        <a class="login-btn" href="./auth.html">Sign In →</a>
+        <a id="topAuthBtn" class="login-btn" href="./auth.html">Sign In →</a>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="wrap">
-    <!-- Hero Section -->
     <section class="hero">
       <div class="badge-pill">
         <span class="pulse"></span>
@@ -509,10 +447,8 @@
       </div>
     </section>
 
-    <!-- Portals Grid -->
     <section id="portal" class="grid">
-      <!-- Test Series Card -->
-      <a class="tile" href="./auth.html?portal=tests">
+      <a id="testPortalCard" class="tile" href="./auth.html?portal=tests">
         <div>
           <div class="tile-top">
             <div class="icon">📝</div>
@@ -529,12 +465,11 @@
           </ul>
         </div>
         <div class="card-cta">
-          <span>Enter Test Portal</span>
+          <span id="testCardCtaText">Enter Test Portal</span>
           <span>→</span>
         </div>
       </a>
 
-      <!-- Notes / Study Material Card -->
       <a class="tile notes-card" href="./notes.html">
         <div>
           <div class="tile-top">
@@ -558,7 +493,6 @@
       </a>
     </section>
 
-    <!-- WhatsApp Support Banner -->
     <section class="support-banner">
       <div class="support-info">
         <h3>Need Help with Test Series, Notes or Payment?</h3>
@@ -571,23 +505,62 @@
     </section>
   </main>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <div>© 2026 Xtreme AG Apps · <strong>exam.xtremeagapps.in</strong></div>
       <div class="footer-links">
-        <a href="./auth.html">Student Login</a>
+        <a href="./auth.html">Account / Login</a>
         <a href="./notes.html">Notes Portal</a>
         <a href="https://wa.me/917878025556" target="_blank" rel="noopener">Support: +91 7878025556</a>
       </div>
     </div>
   </footer>
 
-  <!-- Floating WhatsApp Shortcut -->
-  <a class="wa-float" href="https://wa.me/917878025556?text=Hello%20Xtreme%20AG%20Apps%2C%20I%20have%20a%20query." target="_blank" rel="noopener" title="WhatsApp Support">
+  <a class="wa-float" href="https://wa.me/917878025556?text=Hello%20Xtreme%20AG%20Apps%2C%20I%20have%20a%20query." target="_blank" rel="noopener">
     <span>💬</span>
-    <span>Help: 7878025556</span>
+    <span>7878025556</span>
   </a>
 
+  <!-- Smart Auth Session Checker for Home Page -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (async () => {
+      try {
+        const sb = window.supabase.createClient(
+          "https://vbfjafblxnrfminbdlbb.supabase.co",
+          "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9"
+        );
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) return;
+
+        const topBtn = document.getElementById("topAuthBtn");
+        const testCard = document.getElementById("testPortalCard");
+        const email = (session.user.email || "").toLowerCase().trim();
+
+        const { data: p } = await sb
+          .from("profiles")
+          .select("display_name,mobile,is_admin")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        if (email === "ajeetram3@gmail.com" && p?.is_admin === true) {
+          topBtn.textContent = "⚡ Admin Panel";
+          topBtn.href = "./admin.html";
+          testCard.href = "./test-portal.html";
+        } else if (p?.display_name && p?.mobile) {
+          const firstName = p.display_name.split(" ")[0];
+          topBtn.textContent = "👤 " + firstName + " (Portal)";
+          topBtn.href = "./test-portal.html";
+          testCard.href = "./test-portal.html";
+        } else {
+          topBtn.textContent = "👤 Complete Profile";
+          topBtn.href = "./complete-profile.html";
+          testCard.href = "./complete-profile.html";
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  </script>
 </body>
 </html>
