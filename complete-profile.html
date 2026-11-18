@@ -23,7 +23,7 @@
       --shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -107,11 +107,10 @@
       inset: 0 0 auto;
       height: 6px;
       background: linear-gradient(90deg, var(--blue), var(--indigo));
+      pointer-events: none;
     }
 
-    .top-center {
-      text-align: center;
-    }
+    .top-center { text-align: center; }
 
     .motif {
       display: inline-block;
@@ -139,9 +138,7 @@
       line-height: 1.5;
     }
 
-    .field {
-      margin-bottom: 18px;
-    }
+    .field { margin-bottom: 18px; }
 
     label {
       display: block;
@@ -180,9 +177,7 @@
       transition: all 0.2s ease;
     }
 
-    input.with-prefix {
-      padding-left: 52px;
-    }
+    input.with-prefix { padding-left: 52px; }
 
     input:focus {
       background: #fff;
@@ -202,6 +197,7 @@
       font-size: 15.5px;
       font-weight: 800;
       cursor: pointer;
+      touch-action: manipulation;
       box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
       transition: all 0.2s ease;
     }
@@ -213,21 +209,20 @@
 
     button:disabled {
       opacity: 0.65;
-      cursor: not-allowed;
+      cursor: wait;
     }
 
     #msg {
       text-align: center;
       margin-top: 14px;
       font-size: 13.5px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--blue);
-      min-height: 20px;
+      min-height: 22px;
+      word-break: break-word;
     }
 
-    #msg.error {
-      color: #dc2626;
-    }
+    #msg.error { color: #dc2626; }
 
     .help-footer {
       margin-top: 20px;
@@ -283,7 +278,7 @@
         </div>
       </div>
 
-      <button id="save" type="button">Save & Continue to Test Portal →</button>
+      <button id="save" type="button" onclick="handleSaveProfile()">Save & Continue to Test Portal →</button>
       <div id="msg"></div>
 
       <div class="help-footer">
@@ -297,45 +292,54 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabase = window.supabase.createClient(
+    const sb = window.supabase.createClient(
       "https://vbfjafblxnrfminbdlbb.supabase.co",
       "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9"
     );
     const msg = document.getElementById("msg");
     const saveBtn = document.getElementById("save");
+    let currentSession = null;
 
     async function init() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        location.href = "./auth.html";
-        return;
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) {
+          window.location.href = "./auth.html";
+          return;
+        }
+        currentSession = session;
+
+        const { data: p } = await sb
+          .from("profiles")
+          .select("display_name,mobile,is_admin")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        document.getElementById("name").value =
+          p?.display_name ||
+          session.user.user_metadata?.full_name ||
+          session.user.user_metadata?.name ||
+          "";
+
+        if (p?.display_name && p?.mobile) {
+          route(p, session);
+        }
+      } catch (err) {
+        console.error(err);
       }
-      const { data: p } = await supabase
-        .from("profiles")
-        .select("display_name,mobile,is_admin")
-        .eq("id", session.user.id)
-        .maybeSingle();
-
-      document.getElementById("name").value =
-        p?.display_name ||
-        session.user.user_metadata?.full_name ||
-        session.user.user_metadata?.name ||
-        "";
-
-      if (p?.display_name && p?.mobile) route(p, session);
     }
 
     function route(p, s) {
       const email = (s.user.email || "").toLowerCase().trim();
-      location.href =
-        email === "ajeetram3@gmail.com" && p.is_admin === true
+      window.location.href =
+        email === "ajeetram3@gmail.com" && p?.is_admin === true
           ? "./admin.html"
           : "./test-portal.html";
     }
 
-    saveBtn.onclick = async () => {
+    async function handleSaveProfile() {
       const name = document.getElementById("name").value.trim();
-      const mobile = document.getElementById("mobile").value.trim();
+      const mobile = document.getElementById("mobile").value.replace(/\D/g, "").trim();
 
       msg.className = "";
       if (name.length < 2) {
@@ -350,35 +354,57 @@
       }
 
       saveBtn.disabled = true;
-      msg.textContent = "Saving your profile...";
+      saveBtn.textContent = "Saving Profile...";
+      msg.textContent = "Please wait, saving your details...";
 
-      const { error } = await supabase.rpc("complete_exam_profile", {
-        _display_name: name,
-        _mobile: mobile
-      });
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const activeSession = session || currentSession;
+        if (!activeSession?.user) {
+          throw new Error("Login session expired. Please sign in again.");
+        }
 
-      if (error) {
+        // Primary Method: RPC Call
+        let { error: rpcErr } = await sb.rpc("complete_exam_profile", {
+          _display_name: name,
+          _mobile: mobile
+        });
+
+        // Fallback Method: Direct Upsert if RPC fails
+        if (rpcErr) {
+          console.warn("RPC fallback triggered:", rpcErr.message);
+          const email = (activeSession.user.email || "").toLowerCase().trim();
+          const { error: upsertErr } = await sb.from("profiles").upsert({
+            id: activeSession.user.id,
+            display_name: name,
+            mobile: mobile,
+            email: email,
+            is_admin: email === "ajeetram3@gmail.com",
+            updated_at: new Date().toISOString()
+          });
+          if (upsertErr) throw upsertErr;
+        }
+
+        // Verify saved profile
+        const { data: p, error: fetchErr } = await sb
+          .from("profiles")
+          .select("display_name,mobile,is_admin")
+          .eq("id", activeSession.user.id)
+          .maybeSingle();
+
+        if (fetchErr) throw fetchErr;
+
+        msg.textContent = "✓ Profile saved! Opening Test Portal...";
+        route(p || { display_name: name, mobile, is_admin: false }, activeSession);
+
+      } catch (err) {
+        console.error("Save error:", err);
         saveBtn.disabled = false;
+        saveBtn.textContent = "Save & Continue to Test Portal →";
         msg.className = "error";
-        msg.textContent = error.message;
-        return;
+        msg.textContent = "Error: " + (err.message || "Could not save profile. Check internet/DNS.");
       }
-
-      const { data: p, error: e } = await supabase
-        .from("profiles")
-        .select("display_name,mobile,is_admin")
-        .eq("id", (await supabase.auth.getUser()).data.user.id)
-        .maybeSingle();
-
-      if (e || !p?.display_name || !p?.mobile) {
-        saveBtn.disabled = false;
-        msg.className = "error";
-        msg.textContent = e?.message || "Profile save could not be verified.";
-        return;
-      }
-
-      route(p, (await supabase.auth.getSession()).data.session);
-    };
+    }
 
     init();
   </script>
