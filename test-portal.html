@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Test Series | Xtreme Exam</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" sizes="512x512" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --success: #16a34a;
+      --review: #e11d48;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --bg-page: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+
+    /* Clean Unified App Top Bar */
+    .app-top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+    }
+
+    .app-top-inner {
+      width: min(860px, 100%);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .app-page-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .app-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-chip {
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+    .top-chip.admin { background: #fef3c7; border-color: #fcd34d; color: #b45309; }
+    .top-chip.logout { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+
+    .lobby-wrap {
+      width: min(860px, 100%);
+      margin: 0 auto;
+      padding: 16px 16px 30px;
+    }
+
+    .nav-crumb-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .crumb-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .back-step-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 7px 12px; border-radius: 10px; background: #f8fafc;
+      border: 1px solid var(--border); color: var(--text-main);
+      font-size: 12.5px; font-weight: 800; cursor: pointer;
+    }
+
+    .section-heading { font-size: 17px; font-weight: 800; }
+    .section-sub { font-size: 12px; color: var(--text-sub); font-weight: 600; }
+
+    /* Unified 2-Column Pastel Tiles (Same as Home Page) */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (min-width: 700px) {
+      .tiles-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .folder-tile {
+      border-radius: 18px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 132px;
+      cursor: pointer;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      text-align: left;
+      transition: transform 0.15s ease;
+    }
+
+    .folder-tile:active { transform: scale(0.98); }
+    .folder-tile.theme-0 { background: linear-gradient(145deg, #eff6ff, #dbeafe); border-color: #bfdbfe; }
+    .folder-tile.theme-1 { background: linear-gradient(145deg, #f5f3ff, #ede9fe); border-color: #ddd6fe; }
+    .folder-tile.theme-2 { background: linear-gradient(145deg, #f0f9ff, #e0f2fe); border-color: #bae6fd; }
+    .folder-tile.theme-3 { background: linear-gradient(145deg, #fff7ed, #ffedd5); border-color: #fed7aa; }
+
+    .tile-ico {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: rgba(255, 255, 255, 0.9);
+      display: grid; place-items: center; font-size: 19px;
+      margin-bottom: 10px; box-shadow: 0 3px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    .folder-tile h3 { font-size: 15px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; color: var(--text-main); }
+    .tile-meta { font-size: 11.5px; color: var(--text-sub); font-weight: 600; }
+    .tile-done { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 800; color: #15803d; }
+
+    /* Clean Test List Rows */
+    .test-list-stack { display: flex; flex-direction: column; gap: 12px; }
+    .test-list-row {
+      background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--accent);
+      border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+    }
+    .test-list-row.attempted-row { border-left-color: var(--success); }
+    .test-list-row.upcoming-row { border-left-color: #f59e0b; }
+
+    .row-top-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+    .badge { padding: 3px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 800; }
+    .badge.subj { background: #eff6ff; color: var(--accent); }
+    .badge.live { background: #dcfce7; color: #15803d; }
+    .badge.done { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .badge.soon { background: #fef3c7; color: #b45309; }
+
+    .test-list-row h3 { font-size: 15.5px; font-weight: 800; margin-bottom: 4px; }
+    .row-specs { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--text-sub); font-weight: 600; }
+
+    .row-score-strip {
+      display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+      padding: 6px 10px; border-radius: 10px; background: #f0fdf4; border: 1px solid #bbf7d0;
+      font-size: 11.5px; font-weight: 700; color: #065f46;
+    }
+
+    .row-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .row-actions.single-btn { grid-template-columns: 1fr; }
+
+    .start-btn {
+      padding: 11px 14px; border-radius: 11px; border: 0; background: var(--accent); color: #fff;
+      font-weight: 800; font-size: 13px; cursor: pointer; display: inline-flex;
+      align-items: center; justify-content: center; gap: 5px;
+    }
+    .start-btn.verify-btn { background: #ecfdf5; color: #047857; border: 1.5px solid #6ee7b7; }
+    .start-btn.reattempt-btn { background: var(--primary); color: #fff; }
+    .start-btn.soon-btn { background: #f1f5f9; color: #64748b; cursor: not-allowed; }
+
+    /* ================= FULL-SCREEN EXAM ENGINE ================= */
+    #active-exam-view { display: none; }
+    .exam-app-shell {
+      position: fixed; inset: 0; height: 100dvh; width: 100vw;
+      display: flex; flex-direction: column; background: #f8fafc; z-index: 950; overflow: hidden;
+    }
+    .exam-header {
+      height: 58px; min-height: 58px; background: var(--primary); color: #fff; padding: 0 14px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .exam-title { flex: 1; min-width: 0; }
+    .exam-title h1 { font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .exam-title p { font-size: 11px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .exam-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .timer-badge {
+      background: #dc2626; color: #fff; padding: 6px 10px; border-radius: 8px;
+      font-size: 13.5px; font-weight: 800; font-family: ui-monospace, monospace;
+    }
+    .mobile-palette-btn {
+      display: none; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #475569;
+      color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;
+    }
+    .exam-body {
+      flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 340px;
+      max-width: 1440px; width: 100%; margin: 0 auto; overflow: hidden;
+    }
+    .question-column { display: flex; flex-direction: column; height: 100%; min-height: 0; background: #fff; border-right: 1px solid var(--border); }
+    .q-meta-bar {
+      height: 44px; min-height: 44px; padding: 0 16px; background: #f8fafc;
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .q-badge { background: #eff6ff; border: 1px solid #bfdbfe; color: var(--accent); padding: 3px 10px; border-radius: 6px; font-weight: 800; font-size: 12.5px; }
+    .marks-info { font-size: 12px; color: var(--text-sub); font-weight: 600; }
+    .marks-info .pos { color: var(--success); font-weight: 800; }
+    .marks-info .neg { color: #dc2626; font-weight: 800; }
+    .q-scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px 16px 28px; }
+    .q-body { font-size: 16px; line-height: 1.7; margin-bottom: 20px; font-weight: 500; word-break: break-word; }
+    .options-list { display: flex; flex-direction: column; gap: 11px; }
+    .opt-label {
+      display: flex; align-items: flex-start; padding: 13px 14px; border: 1.5px solid var(--border);
+      border-radius: 11px; cursor: pointer; background: #fff; font-size: 15px; line-height: 1.5;
+    }
+    .opt-label input[type="radio"] { margin-top: 3px; margin-right: 12px; width: 18px; height: 18px; accent-color: var(--accent); flex-shrink: 0; }
+    .opt-label.selected { border-color: var(--accent); background: #eff6ff; font-weight: 600; }
+    .fixed-action-bar {
+      height: 64px; min-height: 64px; padding: 0 12px; background: #fff;
+      border-top: 1px solid #cbd5e1; display: grid; grid-template-columns: 1fr 1.15fr 1.35fr;
+      align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .act-btn {
+      height: 44px; border-radius: 10px; font-size: 13.5px; font-weight: 800; cursor: pointer;
+      border: none; display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .act-btn.prev { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+    .act-btn.review { background: #fff1f2; color: var(--review); border: 1px solid #fecdd3; }
+    .act-btn.review.active-flag { background: var(--review); color: #fff; }
+    .act-btn.next { background: var(--accent); color: #fff; }
+
+    .palette-sidebar { height: 100%; min-height: 0; background: #f8fafc; display: flex; flex-direction: column; padding: 16px; overflow: hidden; }
+    .palette-header { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .close-drawer-btn { display: none; background: #e2e8f0; border: 0; border-radius: 8px; padding: 6px 11px; font-size: 12.5px; font-weight: 800; cursor: pointer; }
+    .palette-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(5, 1fr); align-content: start; gap: 8px; padding: 4px 2px; }
+    .pal-btn { height: 40px; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+    .pal-btn.current { outline: 2.5px solid var(--primary); outline-offset: 1px; }
+    .pal-btn.answered { background: var(--success); color: #fff; border-color: var(--success); }
+    .pal-btn.review { background: var(--review); color: #fff; border-color: var(--review); }
+    .palette-footer { flex-shrink: 0; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 10px; }
+    .legend { font-size: 12px; display: grid; gap: 6px; margin-bottom: 12px; color: var(--text-sub); font-weight: 600; }
+    .legend-row { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 13px; height: 13px; border-radius: 4px; display: inline-block; }
+    .btn-submit { background: var(--success); color: #fff; width: 100%; padding: 13px; border-radius: 10px; border: 0; font-size: 14.5px; font-weight: 800; cursor: pointer; }
+    .btn-exit { background: #e2e8f0; color: #334155; width: 100%; margin-top: 8px; padding: 10px; border-radius: 10px; border: 0; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 1050; }
+
+    #result-screen { display: none; max-width: 860px; margin: 16px auto 40px; padding: 0 14px; }
+    .res-card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 18px; }
+    .stats-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 16px 0; }
+    .stat-card { background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
+    .stat-card .val { font-size: 22px; font-weight: 800; }
+    .sol-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin: 14px 0; }
+    .sol-filter-btn { padding: 7px 13px; border-radius: 999px; border: 1px solid #cbd5e1; background: #fff; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; }
+    .sol-filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .sol-card { background: #fff; border-radius: 12px; border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; }
+    .sol-meta { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px; font-size: 13px; flex-wrap: wrap; gap: 6px; }
+    .sol-exp { background: #f0fdf4; border-left: 4px solid var(--success); padding: 12px; border-radius: 6px; margin-top: 10px; font-size: 13.5px; }
+    .sol-exp.err { background: #fef2f2; border-color: #ef4444; }
+
+    @media (max-width: 920px) {
+      .exam-body { grid-template-columns: 1fr; }
+      .question-column { border-right: 0; }
+      .mobile-palette-btn { display: inline-flex; }
+      .close-drawer-btn { display: inline-block; }
+      .palette-sidebar {
+        position: fixed; top: 0; right: -100%; width: min(330px, 86vw); height: 100dvh;
+        z-index: 1100; background: #fff; transition: right 0.25s ease; box-shadow: -10px 0 30px rgba(0, 0, 0, 0.25);
+      }
+      .palette-sidebar.open { right: 0; }
+      .drawer-backdrop.open { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lobby-view">
+    <header class="app-top-bar">
+      <div class="app-top-inner">
+        <div class="app-page-title">Test Series</div>
+        <div class="app-top-actions">
+          <a id="adminQuickLink" class="top-chip admin" href="./admin.html" style="display:none">⚡ Admin</a>
+          <button type="button" class="top-chip logout" onclick="signOutUser()">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="lobby-wrap">
+      <div class="nav-crumb-bar" id="navCrumbBar"></div>
+      <div id="portalDynamicContainer">
+        <div style="text-align:center;padding:40px;color:var(--text-sub)">Loading test series...</div>
+      </div>
+    </main>
+  </div>
+
+  <div id="active-exam-view">
+    <div class="exam-app-shell" id="exam-screen">
+      <header class="exam-header">
+        <div class="exam-title">
+          <h1 id="activeExamTitle">Mock Examination</h1>
+          <p id="activeExamSub">RPSC Pattern</p>
+        </div>
+        <div class="exam-header-right">
+          <div class="timer-badge" id="timer-display">02:00:00</div>
+          <button type="button" class="mobile-palette-btn" onclick="toggleMobilePalette(true)">
+            <span>☷</span><span id="mob-q-progress">1/100</span>
+          </button>
+        </div>
+      </header>
+
+      <div id="drawerBackdrop" class="drawer-backdrop" onclick="toggleMobilePalette(false)"></div>
+
+      <div class="exam-body">
+        <div class="question-column">
+          <div class="q-meta-bar">
+            <span class="q-badge">Q. <span id="q-idx-view">1</span> / <span id="q-total-view">100</span></span>
+            <span class="marks-info" id="marks-info-text">Marks: <span class="pos">+2.00</span> | Neg: <span class="neg">-0.67</span></span>
+          </div>
+          <div class="q-scroll-area" id="qScrollContainer">
+            <div class="q-body" id="q-text-view"></div>
+            <div class="options-list" id="options-view"></div>
+          </div>
+          <div class="fixed-action-bar">
+            <button type="button" class="act-btn prev" onclick="changeQuestion(-1)">← Prev</button>
+            <button type="button" class="act-btn review" id="reviewBtn" onclick="toggleMarkReview()">🚩 Review</button>
+            <button type="button" class="act-btn next" id="saveNextBtn" onclick="changeQuestion(1)">Save & Next →</button>
+          </div>
+        </div>
+
+        <aside class="palette-sidebar" id="paletteSidebar">
+          <div class="palette-header">
+            <span>Question Palette</span>
+            <button type="button" class="close-drawer-btn" onclick="toggleMobilePalette(false)">✕ Close</button>
+          </div>
+          <div class="palette-grid" id="palette-container"></div>
+          <div class="palette-footer">
+            <div class="legend">
+              <div class="legend-row"><span class="legend-dot" style="background: var(--success);"></span> Answered / Option 5</div>
+              <div class="legend-row"><span class="legend-dot" style="background: var(--review);"></span> Marked for Review</div>
+              <div class="legend-row"><span class="legend-dot" style="background: #fff; border: 1px solid #cbd5e1;"></span> Not Answered</div>
+            </div>
+            <button type="button" class="btn-submit" onclick="confirmSubmission()">✓ Submit Test</button>
+            <button type="button" class="btn-exit" onclick="exitToLobby()">← Exit to Portal</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="result-screen">
+      <div class="res-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--border);padding-bottom:12px">
+          <div>
+            <h2 id="resTestTitleHeading" style="font-size:17px">Detailed Scorecard</h2>
+            <p id="resAttemptDateSub" style="font-size:12px;color:var(--text-sub)"></p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="reattemptFromResultBtn" class="top-chip" style="background:var(--primary);color:#fff;border:0">🔄 Re-attempt</button>
+            <button class="top-chip" style="background:var(--accent);color:#fff;border:0" onclick="exitToLobby()">← Back</button>
+          </div>
+        </div>
+
+        <div class="stats-summary">
+          <div class="stat-card" style="border-top:3px solid var(--accent)"><div class="val" id="res-score" style="color:var(--accent)">0.00</div><div style="font-size:11.5px;color:var(--text-sub)">Net Score</div></div>
+          <div class="stat-card" style="border-top:3px solid var(--success)"><div class="val" id="res-correct" style="color:var(--success)">0</div><div style="font-size:11.5px;color:var(--text-sub)">Correct</div></div>
+          <div class="stat-card" style="border-top:3px solid #ef4444"><div class="val" id="res-wrong" style="color:#ef4444">0</div><div style="font-size:11.5px;color:var(--text-sub)">Wrong</div></div>
+          <div class="stat-card" style="border-top:3px solid #64748b"><div class="val" id="res-skipped" style="color:#64748b">0</div><div style="font-size:11.5px;color:var(--text-sub)">Option 5</div></div>
+          <div class="stat-card" style="border-top:3px solid #dc2626"><div class="val" id="res-blank" style="color:#dc2626">0</div><div style="font-size:11.5px;color:var(--text-sub)">Blank</div></div>
+        </div>
+
+        <div class="sol-filters">
+          <button class="sol-filter-btn active" onclick="filterSolutions('all', this)">All</button>
+          <button class="sol-filter-btn" onclick="filterSolutions('correct', this)">✅ Correct</button>
+          <button class="sol-filter-btn" onclick="filterSolutions('wrong', this)">❌ Wrong</button>
+          <button class="sol-filter-btn" onclick="filterSolutions('unattempted', this)">⚪ Left</button>
+        </div>
+
+        <div id="solutions-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = window.supabase.createClient(
+      "https://vbfjafblxnrfminbdlbb.supabase.co",
+      "sb_publishable_B1zX6LJONSD6icwsbHVmYg_z8qpprk9"
+    );
+
+    const TILE_ICONS = ['📘', '📋', '🏛️', '🗺️', '🎯', '📝'];
+    let currentUser = null, allTests = [], myAttemptsMap = {};
+    let navState = { step: 'exams', examSlug: null, examName: null, subjectName: null };
+    let activeTest = null, questions = [], currentIdx = 0, userSelections = [], reviewFlags = [], remainingSeconds = 7200, examTimer = null;
+
+    function toggleBottomNav(show) {
+      const bn = document.getElementById('xBottomNav');
+      if (bn) bn.style.display = show ? 'grid' : 'none';
+    }
+
+    async function initPortal() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) { window.location.href = "./auth.html"; return; }
+      currentUser = session.user;
+
+      const { data: p } = await sb.from("profiles").select("display_name,mobile,is_admin").eq("id", currentUser.id).maybeSingle();
+      if (!p?.display_name || !p?.mobile) { window.location.href = "./complete-profile.html"; return; }
+
+      if ((currentUser.email || "").toLowerCase() === "ajeetram3@gmail.com" && p.is_admin === true) {
+        document.getElementById("adminQuickLink").style.display = "inline-block";
+      }
+      await fetchPortalData();
+    }
+
+    async function signOutUser() {
+      try { await sb.auth.signOut({ scope: 'local' }); } catch (e) {}
+      localStorage.clear();
+      window.location.replace("./auth.html");
+    }
+
+    async function fetchPortalData() {
+      const [{ data: testsData }, { data: attemptsData }] = await Promise.all([
+        sb.from("exam_tests").select("*").order("created_at", { ascending: true }),
+        sb.from("exam_attempts").select("*").eq("user_id", currentUser.id).order("created_at", { ascending: false })
+      ]);
+      allTests = testsData || [];
+      myAttemptsMap = {};
+      (attemptsData || []).forEach(att => {
+        if (!myAttemptsMap[att.test_id]) myAttemptsMap[att.test_id] = [];
+        myAttemptsMap[att.test_id].push(att);
+      });
+      renderCurrentLobbyStep();
+    }
+
+    function goToExamsStep() { navState = { step: 'exams', examSlug: null, examName: null, subjectName: null }; renderCurrentLobbyStep(); }
+    function openExamSubjects(examSlug, examName) {
+      const examTests = allTests.filter(t => t.exam_slug === examSlug);
+      const uniqueSubjects = [...new Set(examTests.map(t => (t.subject || 'General').trim()))];
+      navState = uniqueSubjects.length <= 1
+        ? { step: 'tests', examSlug, examName, subjectName: uniqueSubjects[0] || null }
+        : { step: 'subjects', examSlug, examName, subjectName: null };
+      renderCurrentLobbyStep();
+    }
+    function openSubjectTests(subjectName) { navState.step = 'tests'; navState.subjectName = subjectName; renderCurrentLobbyStep(); }
+
+    function renderCurrentLobbyStep() {
+      const crumbBar = document.getElementById("navCrumbBar");
+      const container = document.getElementById("portalDynamicContainer");
+
+      if (!allTests.length) {
+        crumbBar.innerHTML = `<div class="section-heading">Exam Categories</div>`;
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-sub)">No tests published yet.</div>`;
+        return;
+      }
+
+      if (navState.step === 'exams') {
+        const examGroups = [];
+        allTests.forEach(t => {
+          let g = examGroups.find(x => x.slug === t.exam_slug);
+          if (!g) { g = { slug: t.exam_slug, name: t.exam_name, tests: [], subjects: new Set() }; examGroups.push(g); }
+          g.tests.push(t);
+          if (t.subject) g.subjects.add(t.subject.trim());
+        });
+
+        crumbBar.innerHTML = `<div class="crumb-left"><div><div class="section-heading">Exam Categories (${examGroups.length})</div><div class="section-sub">Select an exam to view subjects & tests</div></div></div>`;
+        container.innerHTML = `
+          <div class="tiles-grid">
+            ${examGroups.map((g, idx) => {
+              const done = g.tests.filter(t => (myAttemptsMap[t.id] || []).length > 0).length;
+              return `
+                <button type="button" class="folder-tile theme-${idx % 4}" onclick="openExamSubjects('${g.slug}', '${g.name.replace(/'/g, "\\'")}')">
+                  <div class="tile-ico">${TILE_ICONS[idx % TILE_ICONS.length]}</div>
+                  <div>
+                    <h3>${g.name}</h3>
+                    <div class="tile-meta">${g.tests.length} Tests • ${g.subjects.size} Subject${g.subjects.size > 1 ? 's' : ''}</div>
+                    ${done > 0 ? `<div class="tile-done">✅ ${done} Attempted</div>` : ''}
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      if (navState.step === 'subjects') {
+        const examTests = allTests.filter(t => t.exam_slug === navState.examSlug);
+        const subjectGroups = [];
+        examTests.forEach(t => {
+          const sName = (t.subject || 'General').trim();
+          let sg = subjectGroups.find(x => x.name === sName);
+          if (!sg) { sg = { name: sName, tests: [] }; subjectGroups.push(sg); }
+          sg.tests.push(t);
+        });
+
+        crumbBar.innerHTML = `
+          <div class="crumb-left">
+            <button type="button" class="back-step-btn" onclick="goToExamsStep()">← Back</button>
+            <div><div class="section-heading">${navState.examName}</div><div class="section-sub">${subjectGroups.length} Subjects</div></div>
+          </div>
+          <button type="button" class="top-chip" style="background:var(--accent);color:#fff;border:0" onclick="openSubjectTests(null)">All ${examTests.length} Tests →</button>
+        `;
+        container.innerHTML = `
+          <div class="tiles-grid">
+            ${subjectGroups.map((sg, idx) => {
+              const done = sg.tests.filter(t => (myAttemptsMap[t.id] || []).length > 0).length;
+              return `
+                <button type="button" class="folder-tile theme-${idx % 4}" onclick="openSubjectTests('${sg.name.replace(/'/g, "\\'")}')">
+                  <div class="tile-ico">📖</div>
+                  <div>
+                    <h3>${sg.name}</h3>
+                    <div class="tile-meta">${sg.tests.length} Test${sg.tests.length > 1 ? 's' : ''}</div>
+                    ${done > 0 ? `<div class="tile-done">✅ ${done} Done</div>` : ''}
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      const examTests = allTests.filter(t => t.exam_slug === navState.examSlug);
+      const uniqueSubjects = [...new Set(examTests.map(t => (t.subject || 'General').trim()))];
+      const listTests = navState.subjectName ? examTests.filter(t => (t.subject || 'General').trim() === navState.subjectName) : examTests;
+      const backAction = uniqueSubjects.length > 1 ? `openExamSubjects('${navState.examSlug}', '${navState.examName.replace(/'/g, "\\'")}')` : `goToExamsStep()`;
+
+      crumbBar.innerHTML = `
+        <div class="crumb-left">
+          <button type="button" class="back-step-btn" onclick="${backAction}">← Back</button>
+          <div><div class="section-heading">${navState.subjectName || navState.examName}</div><div class="section-sub">${listTests.length} Test${listTests.length > 1 ? 's' : ''}</div></div>
+        </div>
+      `;
+
+      container.innerHTML = `
+        <div class="test-list-stack">
+          ${listTests.map((t, index) => {
+            const isLive = t.status === 'live';
+            const qLen = (t.questions || []).length;
+            const attempts = myAttemptsMap[t.id] || [];
+            const latest = attempts[0] || null;
+
+            return `
+              <div class="test-list-row ${!isLive ? 'upcoming-row' : (latest ? 'attempted-row' : '')}">
+                <div>
+                  <div class="row-top-tags">
+                    <span class="badge subj">#${index + 1} • ${t.subject}</span>
+                    ${!isLive ? `<span class="badge soon">⏳ COMING SOON</span>` : (latest ? `<span class="badge done">✅ ATTEMPTED (${attempts.length}x)</span>` : `<span class="badge live">🟢 LIVE</span>`)}
+                  </div>
+                  <h3>${t.title}</h3>
+                  <div class="row-specs">
+                    <span>❓ ${qLen} Qs</span><span>⏱️ ${t.duration_minutes || 120}m</span><span>🏆 ${t.total_marks || 200} Marks</span>
+                  </div>
+                  ${latest ? `<div class="row-score-strip"><span>Score: <strong>${Number(latest.score).toFixed(2)}/${latest.total_marks}</strong></span><span>✅ ${latest.correct_count}</span><span>❌ ${latest.wrong_count}</span></div>` : ''}
+                </div>
+                <div class="row-actions ${(!isLive || !latest) ? 'single-btn' : ''}">
+                  ${!isLive
+                    ? `<button class="start-btn soon-btn" disabled>Scheduled: ${t.scheduled_date || 'Soon'}</button>`
+                    : (latest
+                        ? `<button class="start-btn verify-btn" onclick="viewPastAttempt('${t.id}')">📊 Result</button>
+                           <button class="start-btn reattempt-btn" onclick="startExam('${t.id}')">🔄 Re-attempt</button>`
+                        : `<button class="start-btn" onclick="startExam('${t.id}')">Start Test →</button>`)
+                  }
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function getLocalSavedAnswers(testId) { try { const r = localStorage.getItem(`xtreme_ans_${currentUser.id}_${testId}`); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+    function saveLocalAnswers(testId, sel) { try { localStorage.setItem(`xtreme_ans_${currentUser.id}_${testId}`, JSON.stringify(sel)); } catch (e) {} }
+    function renderMath() { if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise().catch(() => {}); }
+    function normalizeTestQuestions(t) { return (t.questions || []).map(i => ({ q: i.q || i.question || '', opt: i.opt || i.options || [], ans: typeof i.ans === 'number' ? i.ans : (parseInt(i.answer, 10) || 0), exp: i.exp || i.explanation || '' })); }
+
+    function startExam(testId) {
+      const t = allTests.find(x => x.id === testId);
+      if (!t || !t.questions?.length) { alert("No questions yet."); return; }
+      toggleBottomNav(false);
+      activeTest = t; questions = normalizeTestQuestions(t); currentIdx = 0;
+      userSelections = new Array(questions.length).fill(null);
+      reviewFlags = new Array(questions.length).fill(false);
+      remainingSeconds = (parseInt(t.duration_minutes, 10) || 120) * 60;
+      const marksPerQ = (t.total_marks || 200) / questions.length;
+      document.getElementById("activeExamTitle").textContent = t.title;
+      document.getElementById("activeExamSub").textContent = `${t.exam_name} • ${t.subject}`;
+      document.getElementById("marks-info-text").innerHTML = `Marks: <span class="pos">+${marksPerQ.toFixed(2)}</span> | Neg: <span class="neg">-${(marksPerQ/3).toFixed(2)}</span>`;
+      document.getElementById("lobby-view").style.display = "none";
+      document.getElementById("active-exam-view").style.display = "block";
+      document.getElementById("exam-screen").style.display = "flex";
+      document.getElementById("result-screen").style.display = "none";
+      document.getElementById("q-total-view").innerText = questions.length;
+      buildQuestionPalette(); displayQuestion(0); initTimer();
+    }
+
+    function viewPastAttempt(testId) {
+      const t = allTests.find(x => x.id === testId);
+      const latest = (myAttemptsMap[testId] || [])[0];
+      if (!t || !latest) return;
+      toggleBottomNav(true);
+      activeTest = t; questions = normalizeTestQuestions(t);
+      if (Array.isArray(latest.user_answers) && latest.user_answers.length === questions.length) userSelections = latest.user_answers;
+      else { const l = getLocalSavedAnswers(testId); userSelections = (Array.isArray(l) && l.length === questions.length) ? l : new Array(questions.length).fill(null); }
+      document.getElementById("lobby-view").style.display = "none";
+      document.getElementById("active-exam-view").style.display = "block";
+      document.getElementById("exam-screen").style.display = "none";
+      document.getElementById("result-screen").style.display = "block";
+      renderScorecardUI(latest.created_at, latest);
+    }
+
+    function toggleMobilePalette(open) {
+      document.getElementById("paletteSidebar").classList.toggle("open", open);
+      document.getElementById("drawerBackdrop").classList.toggle("open", open);
+    }
+    function buildQuestionPalette() {
+      const p = document.getElementById("palette-container"); p.innerHTML = "";
+      questions.forEach((_, i) => {
+        const b = document.createElement("button"); b.className = "pal-btn"; b.id = `pal-btn-${i}`; b.innerText = i + 1;
+        b.onclick = () => { displayQuestion(i); toggleMobilePalette(false); }; p.appendChild(b);
+      });
+    }
+    function refreshPaletteState(idx) {
+      const b = document.getElementById(`pal-btn-${idx}`); if (!b) return;
+      b.className = "pal-btn";
+      if (idx === currentIdx) b.classList.add("current");
+      if (reviewFlags[idx]) b.classList.add("review"); else if (userSelections[idx] !== null) b.classList.add("answered");
+    }
+    function displayQuestion(idx) {
+      currentIdx = idx;
+      document.getElementById("q-idx-view").innerText = idx + 1;
+      document.getElementById("mob-q-progress").innerText = `${idx + 1}/${questions.length}`;
+      const qData = questions[idx];
+      document.getElementById("q-text-view").innerHTML = qData.q;
+      const optC = document.getElementById("options-view"); optC.innerHTML = "";
+      qData.opt.forEach((oT, oI) => {
+        const lbl = document.createElement("label");
+        lbl.className = `opt-label ${userSelections[idx] === oI ? "selected" : ""}`;
+        lbl.innerHTML = `<input type="radio" name="active_opt" value="${oI}" ${userSelections[idx] === oI ? "checked" : ""} onchange="recordAnswer(${oI})"><div><strong>(${oI + 1})</strong> ${oT}</div>`;
+        optC.appendChild(lbl);
+      });
+      const rB = document.getElementById("reviewBtn"); rB.classList.toggle("active-flag", reviewFlags[idx]); rB.textContent = reviewFlags[idx] ? "🚩 Reviewed" : "🚩 Review";
+      document.getElementById("saveNextBtn").textContent = idx === questions.length - 1 ? "Submit Test ✓" : "Save & Next →";
+      document.getElementById("qScrollContainer").scrollTop = 0;
+      questions.forEach((_, i) => refreshPaletteState(i)); renderMath();
+    }
+    function recordAnswer(oI) { userSelections[currentIdx] = oI; displayQuestion(currentIdx); }
+    function toggleMarkReview() { reviewFlags[currentIdx] = !reviewFlags[currentIdx]; displayQuestion(currentIdx); }
+    function changeQuestion(d) { const t = currentIdx + d; if (t >= 0 && t < questions.length) displayQuestion(t); else if (d > 0 && currentIdx === questions.length - 1) toggleMobilePalette(true); }
+    function initTimer() {
+      if (examTimer) clearInterval(examTimer);
+      examTimer = setInterval(() => {
+        if (remainingSeconds <= 0) { clearInterval(examTimer); submitAndSaveExam(); return; }
+        remainingSeconds--;
+        const h = Math.floor(remainingSeconds / 3600), m = Math.floor((remainingSeconds % 3600) / 60), s = remainingSeconds % 60;
+        document.getElementById("timer-display").innerText = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+      }, 1000);
+    }
+    function confirmSubmission() { toggleMobilePalette(false); if (confirm("क्या आप निश्चित रूप से परीक्षा सबमिट करना चाहते हैं?")) { clearInterval(examTimer); submitAndSaveExam(); } }
+
+    function renderScorecardUI(attemptDateStr, savedOverride) {
+      document.getElementById("resTestTitleHeading").textContent = activeTest?.title || "Scorecard";
+      document.getElementById("resAttemptDateSub").textContent = attemptDateStr ? new Date(attemptDateStr).toLocaleString('en-IN') : 'Just Completed';
+      document.getElementById("reattemptFromResultBtn").onclick = () => startExam(activeTest.id);
+      let c = 0, w = 0, s5 = 0, bl = 0, solHtml = "";
+      const totalM = activeTest?.total_marks || 200, mPQ = totalM / questions.length, negP = mPQ / 3;
+      questions.forEach((q, i) => {
+        const a = userSelections[i], has5 = q.opt.length >= 5;
+        let tag = "", ok = false, st = "unattempted";
+        if (has5 && a === 4) { s5++; tag = '<span style="color:#64748b">⚪ Option 5 (0)</span>'; }
+        else if (a === null || a === undefined) { bl++; tag = `<span style="color:#dc2626">⚪ Blank (-${negP.toFixed(2)})</span>`; }
+        else if (a === q.ans) { c++; ok = true; st = "correct"; tag = `<span style="color:var(--success)">✅ Correct (+${mPQ.toFixed(2)})</span>`; }
+        else { w++; st = "wrong"; tag = `<span style="color:#dc2626">❌ Wrong (-${negP.toFixed(2)})</span>`; }
+        solHtml += `<div class="sol-card" data-status="${st}"><div class="sol-meta"><span>Q.${i+1}</span><span>${tag}</span></div><div style="font-size:14.5px;margin-bottom:8px">${q.q}</div><div style="font-size:13.5px">Your Ans: <strong>${a!==null&&a!==undefined&&q.opt[a]?"("+(a+1)+") "+q.opt[a]:"None"}</strong></div><div style="color:var(--success);font-weight:700;font-size:13.5px;margin-top:4px">✓ Correct: (${q.ans+1}) ${q.opt[q.ans]}</div>${q.exp?`<div class="sol-exp ${ok?"":"err"}">${q.exp}</div>`:""}</div>`;
+      });
+      const net = (c * mPQ) - ((w + bl) * negP);
+      const hasQ = userSelections.some(x => x !== null && x !== undefined);
+      document.getElementById("res-score").innerText = ((!hasQ && savedOverride) ? Number(savedOverride.score) : net).toFixed(2);
+      document.getElementById("res-correct").innerText = (!hasQ && savedOverride) ? savedOverride.correct_count : c;
+      document.getElementById("res-wrong").innerText = (!hasQ && savedOverride) ? savedOverride.wrong_count : w;
+      document.getElementById("res-skipped").innerText = s5;
+      document.getElementById("res-blank").innerText = bl;
+      document.getElementById("solutions-list").innerHTML = solHtml;
+      document.querySelectorAll('.sol-filter-btn').forEach((b, idx) => b.classList.toggle('active', idx === 0));
+      renderMath(); window.scrollTo({ top: 0, behavior: "smooth" });
+      return { finalNetScore: net, totalMarks: totalM, correctCount: c, wrongCount: w, unattemptedCount: s5 + bl };
+    }
+    function filterSolutions(t, b) {
+      document.querySelectorAll('.sol-filter-btn').forEach(x => x.classList.remove('active')); b.classList.add('active');
+      document.querySelectorAll('#solutions-list .sol-card').forEach(c => { c.style.display = (t === 'all' || c.dataset.status === t) ? 'block' : 'none'; });
+    }
+    async function submitAndSaveExam() {
+      toggleBottomNav(true);
+      document.getElementById("exam-screen").style.display = "none";
+      document.getElementById("result-screen").style.display = "block";
+      const stats = renderScorecardUI(null, null);
+      if (currentUser && activeTest) {
+        saveLocalAnswers(activeTest.id, userSelections);
+        const p = { user_id: currentUser.id, test_id: activeTest.id, test_title: activeTest.title, exam_name: activeTest.exam_name, subject: activeTest.subject, score: Number(stats.finalNetScore.toFixed(2)), total_marks: stats.totalMarks, correct_count: stats.correctCount, wrong_count: stats.wrongCount, unattempted_count: stats.unattemptedCount, user_answers: userSelections };
+        try { const { error } = await sb.from("exam_attempts").insert([p]); if (error) { delete p.user_answers; await sb.from("exam_attempts").insert([p]); } await fetchPortalData(); } catch (e) {}
+      }
+    }
+    async function exitToLobby() {
+      if (examTimer) clearInterval(examTimer);
+      toggleMobilePalette(false); toggleBottomNav(true);
+      document.getElementById("active-exam-view").style.display = "none";
+      document.getElementById("lobby-view").style.display = "block";
+      await fetchPortalData();
+    }
+    initPortal();
+  </script>
+  <script src="./app-shell.js"></script>
+</body>
+</html>
