@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "in.xtremeagapps.exam",
+        "sha256_cert_fingerprints": ["96:1E:3F:F4:32:1E:C5:1B:82:BE:E7:0F:24:8E:2B:BB:F5:92:A1:9B:46:C4:95:08:CA:30:FC:7A:62:40:6F:BE"]
+      }
+    }]
