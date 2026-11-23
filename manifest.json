@@ -1,0 +1,19 @@
+{
+  "name": "Xtreme Exam & Notes",
+  "short_name": "Xtreme Exam",
+  "description": "Rajasthan Competitive Exams Test Series & Study Notes Portal",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "./favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
